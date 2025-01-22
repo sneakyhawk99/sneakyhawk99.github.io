@@ -48,7 +48,14 @@ nav .navigation a {
     font-weight: bold;
 }
 
+#about {
+    width: 25%;
+    height; 100%;
+    
+}
+
 .section {
+    width; 75%;
     background: #ffffff;
     margin: 20px 0;
     padding: 20px;
