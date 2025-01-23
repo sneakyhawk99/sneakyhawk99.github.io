@@ -49,9 +49,9 @@ nav .navigation a {
 }
 
 main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: 25% 1fr:;
+    gap: 20px;
 
 #about {
     width: 25%;
@@ -72,7 +72,8 @@ main {
 }
 
 #education, #experience, #skills {
-    width: 32%;
+    background: #ffffff;
+    margin-bottom: 20px;
 }
 
 .section h2 {
