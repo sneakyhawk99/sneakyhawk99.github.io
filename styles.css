@@ -48,12 +48,6 @@ nav .navigation a {
     font-weight: bold;
 }
 
-main {
-    display: grid;
-    grid-template-columns: 25% 1fr:;
-    gap: 20px;
-}
-
 #about {
     background: #ffffff
     padding: 20px;
@@ -68,11 +62,6 @@ main {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-#education, #experience, #skills {
-    background: #ffffff;
-    margin-bottom: 20px;
 }
 
 .section h2 {
