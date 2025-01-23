@@ -63,7 +63,8 @@ nav .navigation a {
 }
 
 #experience h3 {
-    padding-top
+    padding-top: 10px;
+}
 
 .headshot {
     width: 150px;
