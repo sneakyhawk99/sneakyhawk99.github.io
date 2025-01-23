@@ -52,6 +52,7 @@ main {
     display: grid;
     grid-template-columns: 25% 1fr:;
     gap: 20px;
+}
 
 #about {
     background: #ffffff
