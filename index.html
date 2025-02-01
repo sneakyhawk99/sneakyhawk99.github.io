@@ -96,13 +96,18 @@
                     event.preventDefault(); 
 
                     const targetID = this.getAttribute("href");
+                    console.log("Target ID:", targetId);
+                    
                     const targetElement = document.querySelector(targetId);
+                    console.log("Target Element", targetElement)'
 
                     if (targetElement) {
                         window.scrollTo({
                             top: targetElement.offsetTop - 20,
                             behavior: "smooth"
                         });
+                    } else {
+                        console.log("Target element not found);
                     }
                 });
             });
