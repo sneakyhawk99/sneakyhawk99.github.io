@@ -17,7 +17,7 @@
 
     <script>
       var esriConfig = {
-        apiKey: "YOUR_ACCESS_TOKEN"
+        apiKey: "AAPTxy8BH1VEsoebNVZXo8HurCUGQrXu3erpYf0aHrvNXlY2k_bHzGoRbEOMeM4CovQLQ4_5TDEXRExKbeJ3G1gzUztP-y2kZBZaQAZUTxjwO3XIGYBNBBQ9fCXGLyy2xrH6UWabeLBjzxxsTVZkajEazOjaXx1a4u-FDW1L_zcutIqIe397yc7pDNGcyPJoFXHCwbaZkZ1amHxvnMRDfu2hMnE36f1fM8rdhpbEEzSW_CE.AT1_2TyVjxUD"
       };
     </script>
 
