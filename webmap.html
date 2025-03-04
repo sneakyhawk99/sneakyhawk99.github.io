@@ -53,12 +53,26 @@
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
 
-        // Canyon feature layer (points)
-        const canyonLayer = new FeatureLayer({
+        // Canyon pin feature layer (points)
+        const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1"
         });
 
-        arcgisMap.addLayer(canyonLayer);
+        arcgisMap.addLayer(canyonLayer0);
+
+        // Canyon dot feature layer (points)
+        const canyonLayer1 = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
+        });
+
+        arcgisMap.addLayer(canyonLayer1);
+
+        // Canyon route layer (lines)
+        const parksLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
+        });
+
+        arcgisMap.addLayer(parksLayer, 0);
       });
 
     });
