@@ -47,6 +47,27 @@
       <arcgis-zoom position="top-left"></arcgis-zoom>
 
     </arcgis-map>
+    
+    <div id="about" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 350px; z-index: 50; padding: 5px; background-color: rgb(247, 239, 223); box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+  		<div style="cursor: pointer; text-align:right; color: red; font-weight: bold;" onclick="closeabout()" ;="">X</div>
+  		<img src="delicate.jpg" width="300px">
+  			<h2>Arches and Bridges of the Colorado Plateau</h2>
+  		<p style="font-size: 0.9em; font-style: italic; margin-block:0em;" target="_blank">A <a href="https://carto.byu.edu/my-geo-collections">geo-collection</a> by <a href="http://carto.byu.edu/" target="_blank">Brandon Plewe</a><br>
+  				</p><p>This map visualizes the distribution of almost 700 natural arches and bridges on the Colorado Plateau of Utah, Arizona, Colorado, and New Mexico.
+  			This region has the largest concentration of arches in the world, and many of the largest (at least half of the 20 longest spans). As you can see,
+  			They are especially concentrated in <a href="http://nps.gov/arch" target="_blank">Arches National Park</a>, in the Jurassic-era Entrada Sandstone, and in the Needles
+  			District of <a href="http://nps.gov/care" target="_blank">Canyonlands National Park</a>, in the Permian-era Cedar Mesa Sandstone.</p>
+  		<p>My geo-collection of these arches is not exhaustive; the <a href="https://arches.stonecanyonadventures.com/">World Arch Database</a> includes over 6,000 in this area.
+  		I chose to focus on the most signficant spans, at least 20ft wide, with a few notable smaller examples. The circle size represents the measured width, 
+  		and you can click on each one to get more information. This information has been gathered from multiple sources, so please do not consider this page the final 
+  		authority for anything. And no, I haven't been to all of them, only about 50. But I'm working on it...</p>
+  		<p>If you wish, you are welcome to <a href="https://byu.maps.arcgis.com/home/item.html?id=e0ebce0dc5284cf881059c9d2af322c1" target="_blank">download the GIS data</a>
+  		from ArcGIS Online. All I ask is that you give me credit if you use it.</p>
+   
+  		<h2>Now go explore!</h2>
+  		<div style="cursor: pointer; text-align:right; color: red; font-weight: bold;" onclick="closeabout()" ;="">close</div>
+		</div>
+    
     <script>
     require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
       
