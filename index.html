@@ -118,7 +118,24 @@
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-          popupTemplate: popupCanyons
+          popupTemplate: popupCanyons,
+	  labelingInfo: [
+		  {
+			  labelExpressionInfo: {expression: "$feature.Location" },
+			  symbol: {
+				  type: "text",
+				  color: "black",
+				  haloColor: "rgb(233,230,208,0.05)",
+				  haloSize: "2px",
+				  font: {
+					  size: 12,
+					  family: "Perpetua"
+					  weight: "bold"
+				  }
+			  },
+			  labelPlacement: "above-right",
+			  minScale: 150000,
+			  maxScale: 0
         });
 
         arcgisMap.addLayer(canyonLayer0);
