@@ -6,7 +6,7 @@
   cursor: pointer;
   width: 33.33%;
   float: left;
-  font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--calcite-sans-family);
 }
 
 .tab button:hover {
