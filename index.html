@@ -133,11 +133,11 @@
         arcgisMap.addLayer(canyonLayer1);
 
         // Canyon route layer (lines)
-        const parksLayer = new FeatureLayer({
+        const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
         });
 
-        arcgisMap.addLayer(parksLayer, 0);
+        arcgisMap.addLayer(routeLayer, 0);
 
 	// Add event listener for pin click
 	canyonLayer0.on("click", (event) => {
@@ -147,11 +147,12 @@
 		parksLayer.definitionExpression = "CanyonName = '" + location + "'";
 
 		// Apply fading effect to lines that don't match
-		parksLayer.renderer - {
+		routeLayer.renderer = {
 			type: "simple",
 			symbol: {
 				type: "simple-line",
 				color: "rgba(0, 0, 0, 0.3)" // Adjust the color to fade the lines
+				width: "3px"
 			}
 		}
       });
