@@ -110,7 +110,22 @@
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
         
-        // Define a pop-up for canyon
+        //Enable popup docking and configure it
+	const popup = new Popup({
+	  dockEnabled: true,
+	  dockOptions: {
+		//Disables the dock button
+		buttonEnabled: false,
+		//Position of dock
+		position: "bottom-right",
+		//ignore default sizes that trigger responsive docking
+		breakpoint: false
+	  }
+	});
+
+	view.popup = popup;
+	      
+	// Define a pop-up for canyon
         const popupCanyons = {
           title: "{Location}",
           content:
