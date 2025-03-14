@@ -43,12 +43,12 @@
 
   <body>
 
-    <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
+    <arcgis-map basemap="arcgis/topographic" center="-111.427031,39.212335" zoom="7.5">
       <arcgis-zoom position="top-right"></arcgis-zoom>
     </arcgis-map>
 	  
     <!-- interface pannel on side  --> 
-    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); /* box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; */ max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
@@ -108,7 +108,7 @@
     require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
 	    
       const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+      arcgisMap.addEventListener("arcgisViewReadyChange", (event) => {
 	const view = event.detail.view; //get the map view
         
         // Define a pop-up for canyon
