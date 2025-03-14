@@ -105,10 +105,17 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/widgets/Popup"], (FeatureLayer, Popup) => {
-      
-      const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+      require(["esri/layers/FeatureLayer", "esri/widgets/Popup", "esri/MapView", "esri/Map"], (FeatureLayer, Popup, MapView, Map) => {
+        const arcgisMap = new Map({
+          basemap: "topographic"
+        });
+
+        const view = new MapView({
+          container: "arcgis-map", // Ensure this is connected to the arcgis-map element
+          map: arcgisMap,
+          center: [-111.427031, 39.212335],
+          zoom: 7.5
+        });
         
         //Enable popup docking and configure it
 	const popup = new Popup({
@@ -156,7 +163,7 @@
 
       });
 
-    });
+
     </script>
 
   </body>
