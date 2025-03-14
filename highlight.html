@@ -48,7 +48,7 @@
     </arcgis-map>
 	  
     <!-- interface pannel on side  --> 
-    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); /* box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; */ max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
@@ -145,21 +145,21 @@
           popupTemplate: popupCanyons
         });
 
-        arcgisMap.addLayer(canyonLayer0);
+        arcgisMap.add(canyonLayer0);
 
         // Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
 
-        arcgisMap.addLayer(canyonLayer1);
+        arcgisMap.add(canyonLayer1);
 
         // Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
         });
 
-        arcgisMap.addLayer(routeLayer, 0);
+        arcgisMap.add(routeLayer);
 
       });
 
