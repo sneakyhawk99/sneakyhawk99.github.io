@@ -87,40 +87,37 @@
     function openTab(evt, tabName) {
 	  var i, tabcontent, tablinks;
 	    
-  	// hide tab content
-  	tabcontent = document.getElementsByClassName("tabcontent");
-  	for (i = 0; i < tabcontent.length; i++) {
-  		tabcontent[i].style.display = "none";
-  	}
-  
-  	//remove active class from all tabs
-  	tablinks = document.getElementsByClassName("tablinks");
-  	for (i = 0; i < tablinks.length; i++) {
-  		tablinks[i].classList.remove("active");
-  	}
-  
-  	//show the clicked tab content and add active class to clicked tab
-  	document.getElementById(tabName).style.display = "block";
-  	evt.currentTarget.classList.add("active");
-      }
+	// hide tab content
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+	
+	//remove active class from all tabs
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].classList.remove("active");
+	}
+	
+	//show the clicked tab content and add active class to clicked tab
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+	}
   	    
-    // Add the necessary modules for ma and selector
-	require([
-	  "esri/layers/FeatureLayer", 
-	  "esri/renderers/SimpleRenderer",
-	  "esri/symbols/SimpleLineSymbol",
-	  "esri/core/watchUtils"
-	], (FeatureLayer, SimpleRenderer, SimpleLineSymbol, watchUtils) => {
+    // ArcGIS map layers set up
+	require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
 	  
 	  const arcgisMap = document.querySelector("arcgis-map");
 	  arcgisMap.addEventListener("arcgisViewReadyChange", () => {
 	    
-	    // Define your layers as before
+	    // Define a pop-up for canyon
 	    const popupCanyons = {
 	      title: "{Location}",
-	      content: /* your popup content */
+	      content:
+	        "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
 	    };
 	
+	    // Canyon pin feature layer (points)
 	    const canyonLayer0 = new FeatureLayer({
 	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
 	      popupTemplate: popupCanyons
@@ -128,47 +125,46 @@
 	
 	    arcgisMap.addLayer(canyonLayer0);
 	
+	    // Canyon dot feature layer (points)
 	    const canyonLayer1 = new FeatureLayer({
 	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
 	    });
 	
 	    arcgisMap.addLayer(canyonLayer1);
 	
+	    // Canyon route layer (lines)
 	    const routeLayer = new FeatureLayer({
 	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
 	    });
 	
 	    arcgisMap.addLayer(routeLayer, 0);
 	    
-	    // Store the original renderer
-	    let originalRenderer;
+	    // Get the map view
+	    const view = arcgisMap.view;
 	    
-	    // When the route layer is loaded, store its original renderer
-	    routeLayer.when(() => {
-	      originalRenderer = routeLayer.renderer.clone();
-	    });
-	
-	    // Set up click event
-	    arcgisMap.view.on("click", (event) => {
-	      arcgisMap.view.hitTest(event).then((response) => {
-	        // Check if a feature from canyonLayer0 was clicked
-	        const canyonFeature = response.results.find(
-	          result => result.layer === canyonLayer0
-	        );
+	    // Listen for click events on the pin layer
+	    view.on("click", function(event) {
+	      // Perform a hit test to see if a canyon pin was clicked
+	      view.hitTest(event).then(function(response) {
+	        // Find the first feature layer result (the pin)
+	        const pinResult = response.results.find(function(result) {
+	          return result.graphic.layer === canyonLayer0;
+	        });
 	        
-	        if (canyonFeature) {
-	          // Get the Location value from the clicked pin
-	          const location = canyonFeature.graphic.attributes.Location;
+	        if (pinResult) {
+	          // Get the Location attribute from the pin
+	          const location = pinResult.graphic.attributes.Location;
+	          console.log("Clicked on canyon:", location);
 	          
-	          // Use a unique value renderer to maintain original colors but fade non-matching routes
+	          // Set an effect on the route layer
 	          routeLayer.effect = {
 	            filter: {
 	              where: `CanyonName = '${location}'`
 	            },
-	            excludedEffect: "opacity(0.2)" // non-matching features will be 20% opacity
+	            excludedEffect: "opacity(0.2)"
 	          };
 	        } else {
-	          // Reset to original state if click is not on a canyon pin
+	          // Reset the effect if click is not on a pin
 	          routeLayer.effect = null;
 	        }
 	      });
