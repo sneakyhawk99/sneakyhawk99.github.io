@@ -138,6 +138,22 @@
         });
 
         arcgisMap.addLayer(parksLayer, 0);
+
+	// Add event listener for pin click
+	canyonLayer0.on("click", (event) => {
+		const location = event.graphic.attributes.Location; // Get the Location (CanyonName) from the clicked pin
+
+		//Set the definition expression for the parksLayer to filter by CanyonName
+		parksLayer.definitionExpression = "CanyonName = '" + location + "'";
+
+		// Apply fading effect to lines that don't match
+		parksLayer.renderer - {
+			type: "simple",
+			symbol: {
+				type: "simple-line",
+				color: "rgba(0, 0, 0, 0.3)" // Adjust the color to fade the lines
+			}
+		}
       });
 
     });
