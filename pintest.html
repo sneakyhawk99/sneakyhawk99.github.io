@@ -109,6 +109,7 @@
 	  
 	  const arcgisMap = document.querySelector("arcgis-map");
 	  arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+	    console.log("Map view is ready");
 	    
 	    // Define a pop-up for canyon
 	    const popupCanyons = {
@@ -120,10 +121,12 @@
 	    // Canyon pin feature layer (points)
 	    const canyonLayer0 = new FeatureLayer({
 	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-	      popupTemplate: popupCanyons
+	      popupTemplate: popupCanyons,
+	      outFields: ["*"] // Make sure all fields are available
 	    });
 	
 	    arcgisMap.addLayer(canyonLayer0);
+	    console.log("Added canyon pins layer");
 	
 	    // Canyon dot feature layer (points)
 	    const canyonLayer1 = new FeatureLayer({
@@ -134,41 +137,97 @@
 	
 	    // Canyon route layer (lines)
 	    const routeLayer = new FeatureLayer({
-	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
+	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
+	      outFields: ["*"] // Make sure all fields are available
 	    });
 	
 	    arcgisMap.addLayer(routeLayer, 0);
+	    console.log("Added route layer");
 	    
-	    // Get the map view
-	    const view = arcgisMap.view;
-	    
-	    // Listen for click events on the pin layer
-	    view.on("click", function(event) {
-	      // Perform a hit test to see if a canyon pin was clicked
-	      view.hitTest(event).then(function(response) {
-	        // Find the first feature layer result (the pin)
-	        const pinResult = response.results.find(function(result) {
-	          return result.graphic.layer === canyonLayer0;
-	        });
+	    // Make sure the view is accessible
+	    setTimeout(() => {
+	      const view = arcgisMap.view;
+	      if (!view) {
+	        console.error("View not available");
+	        return;
+	      }
+	      
+	      console.log("Setting up click event on view");
+	      
+	      // Add click event directly to the map view
+	      view.on("click", function(event) {
+	        console.log("Map clicked", event);
 	        
-	        if (pinResult) {
-	          // Get the Location attribute from the pin
-	          const location = pinResult.graphic.attributes.Location;
-	          console.log("Clicked on canyon:", location);
+	        // Perform a hit test
+	        view.hitTest(event).then(function(response) {
+	          console.log("Hit test results:", response.results);
 	          
-	          // Set an effect on the route layer
-	          routeLayer.effect = {
-	            filter: {
-	              where: `CanyonName = '${location}'`
-	            },
-	            excludedEffect: "opacity(0.2)"
-	          };
-	        } else {
-	          // Reset the effect if click is not on a pin
-	          routeLayer.effect = null;
-	        }
+	          // Try to find a canyon pin in the results
+	          const pinResult = response.results.find(function(result) {
+	            return result.graphic && result.graphic.layer === canyonLayer0;
+	          });
+	          
+	          if (pinResult) {
+	            console.log("Pin clicked:", pinResult.graphic.attributes);
+	            
+	            // Get the Location attribute
+	            const location = pinResult.graphic.attributes.Location;
+	            console.log("Canyon location:", location);
+	            
+	            try {
+	              // Apply effect to route layer
+	              routeLayer.effect = {
+	                filter: {
+	                  where: `CanyonName = '${location}'`
+	                },
+	                excludedEffect: "opacity(0.2)"
+	              };
+	              console.log("Applied effect to route layer");
+	            } catch (e) {
+	              console.error("Error applying effect:", e);
+	            }
+	          } else {
+	            console.log("No pin in hit results");
+	            
+	            // Reset effect
+	            try {
+	              routeLayer.effect = null;
+	              console.log("Reset route layer effect");
+	            } catch (e) {
+	              console.error("Error resetting effect:", e);
+	            }
+	          }
+	        }).catch(function(error) {
+	          console.error("Error in hit test:", error);
+	        });
 	      });
-	    });
+	      
+	      // Check field names in both layers
+	      Promise.all([
+	        canyonLayer0.queryFeatures({
+	          where: "1=1",
+	          outFields: ["*"],
+	          returnGeometry: false,
+	          num: 1
+	        }),
+	        routeLayer.queryFeatures({
+	          where: "1=1",
+	          outFields: ["*"],
+	          returnGeometry: false,
+	          num: 1
+	        })
+	      ]).then(([pinResults, routeResults]) => {
+	        if (pinResults.features.length > 0) {
+	          console.log("Pin layer fields:", Object.keys(pinResults.features[0].attributes));
+	        }
+	        if (routeResults.features.length > 0) {
+	          console.log("Route layer fields:", Object.keys(routeResults.features[0].attributes));
+	        }
+	      }).catch(e => {
+	        console.error("Error querying layers:", e);
+	      });
+	      
+	    }, 2000); // Wait 2 seconds to ensure the view is fully loaded
 	  });
 	});
     </script>
