@@ -2,8 +2,9 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>ArcGIS Maps SDK for JavaScript Tutorials: Display a map</title>
-
+    <title>Technical Canyoneering Routes Utah</title>
+    <link rel="icon" type="image/png" href="desertfavicon.png">
+    <link rel="stylesheet" href="styles.css">
     <style>
       html, body {
         padding: 0;
@@ -43,23 +44,100 @@
   <body>
 
     <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
-
-      <arcgis-zoom position="top-left"></arcgis-zoom>
-
+      <arcgis-zoom position="top-right"></arcgis-zoom>
     </arcgis-map>
+	  
+    <!-- interface pannel on side  --> 
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); /* box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; */ max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+	<!-- Tab links -->
+	<div class="tab">
+		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
+		<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
+		<button class="tablinks" onclick="openTab(event, 'filter')">Filter Tool</button>
+	</div>
+			
+	<!-- Tab Content -->    
+	<div id="intro"	class="tabcontent">
+		<img src="canyoneering.JPG" width="200px" style="display: block; margin: 0 auto; margin-top: 45px; width: 300px;">
+		<h2>An Introduction to Technical Canyoneering Routes in Utah</h2>
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">By Andrew Ashton<br></p>
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">Source: <a href="https://ropewiki.com/Utah">Ropewiki.com/Utah</a><br></p>
+		<p>Utah’s stunning sandstone canyons, shaped by wind and water over millions of years, make it one of the best places for technical canyoneering. From Zion National Park 
+			to the remote San Rafael Swell, the state's rugged terrain offers both beauty and adventure for outdoor enthusiasts.</p>
+		<p>Technical canyoneering goes beyond hiking, requiring skills like rappelling, anchor setting, and navigating narrow, water-carved passages. Many routes feature sheer 
+			drops, deep pools, and tight squeezes, making preparation and technical knowledge essential. Whether you're an experienced canyoneer or a beginner with a guide, 
+			Utah’s canyons promise an unforgettable challenge in a world-class outdoor setting.</p>
+		<p>This map uses community-contributed data from RopeWiki to visually explore potential canyoneering routes. Each pin provides key details about a canyon, including its 
+			difficulty rating, number of rappels, and estimated duration. The routes are displayed to give an overview of their length and topography.</p>
+		<p><strong>Select a canyon to learn more, or use the Filter tab to refine results based on specific attributes. For more in-depth information, follow the provided links
+			to RopeWiki pages for each canyon.</strong></p>
+		<h2>Happy canyoneering!</h2>
+	</div>
+	    
+	<div id="rating" class="tabcontent">
+	</div>
+	    
+	<div id="filter" class="tabcontent">
+		<p>yo yo this is my filter tool</p>
+	</div>
+    </div>
+    
     <script>
-    require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
-      
-      const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+    //function to open the tab content
+    function openTab(evt, tabName) {
+	var i, tabcontent, tablinks;
+	    
+	// hide tab content
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+
+	//remove active class from all tabs
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].classList.remove("active");
+	}
+
+	//show the clicked tab content and add active class to clicked tab
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+    }
+	    
+    // ArcGIS map layers set up
+      require(["esri/layers/FeatureLayer", "esri/widgets/Popup", "esri/MapView", "esri/Map"], (FeatureLayer, Popup, MapView, Map) => {
+        const arcgisMap = new Map({
+          basemap: "topographic"
+        });
+
+        const view = new MapView({
+          container: "arcgis-map", // Ensure this is connected to the arcgis-map element
+          map: arcgisMap,
+          center: [-111.427031, 39.212335],
+          zoom: 7.5
+        });
         
-        // Define a pop-up for canyon
+        //Enable popup docking and configure it
+	const popup = new Popup({
+	  dockEnabled: true,
+	  dockOptions: {
+		//Disables the dock button
+		buttonEnabled: false,
+		//Position of dock
+		position: "bottom-right",
+		//ignore default sizes that trigger responsive docking
+		breakpoint: false
+	  }
+	});
+
+	view.popup = popup;
+	      
+	// Define a pop-up for canyon
         const popupCanyons = {
           title: "{Location}",
           content:
             "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
         };
-
 
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
@@ -67,24 +145,25 @@
           popupTemplate: popupCanyons
         });
 
-        arcgisMap.addLayer(canyonLayer0);
+        arcgisMap.add(canyonLayer0);
 
         // Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
 
-        arcgisMap.addLayer(canyonLayer1);
+        arcgisMap.add(canyonLayer1);
 
         // Canyon route layer (lines)
-        const parksLayer = new FeatureLayer({
+        const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
         });
 
-        arcgisMap.addLayer(parksLayer, 0);
+        arcgisMap.add(routeLayer);
+
       });
 
-    });
+
     </script>
 
   </body>
