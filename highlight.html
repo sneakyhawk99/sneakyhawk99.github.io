@@ -105,7 +105,7 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
+    require(["esri/layers/FeatureLayer", "esri/widgets/Popup"], (FeatureLayer, Popup) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
@@ -139,6 +139,12 @@
 
         arcgisMap.addLayer(routeLayer, 0);
 
+	//enable popup docking in bottom-right corner
+	arcgisMap.view.popup.dockEnabled = true;
+	arcgisMap.view.popup.dockOptions = {
+		position: "bottom-right",
+		buttonEnabled: false
+	};
 
       });
 
