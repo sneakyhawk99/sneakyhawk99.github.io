@@ -105,92 +105,76 @@
       }
   	    
     // Add the necessary modules for ma and selector
-    require([
-      "esri/layers/FeatureLayer", 
-      "esri/renderers/SimpleRenderer",
-      "esri/symbols/SimpleLineSymbol"
-    ], (FeatureLayer, SimpleRenderer, SimpleLineSymbol) => {
-      
-      const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-        
-        // Define a pop-up for canyon
-        const popupCanyons = {
-          title: "{Location}",
-          content:
-            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
-        };
-    
-        // Canyon pin feature layer (points)
-        const canyonLayer0 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-          popupTemplate: popupCanyons
-        });
-    
-        arcgisMap.addLayer(canyonLayer0);
-    
-        // Canyon dot feature layer (points)
-        const canyonLayer1 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
-        });
-    
-        arcgisMap.addLayer(canyonLayer1);
-    
-        // Canyon route layer (lines)
-        const routeLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
-        });
-    
-        arcgisMap.addLayer(routeLayer, 0);
-        
-        // Store the original renderer to reset when needed
-        let originalRenderer;
-        
-        // When the route layer is loaded, store its original renderer
-        routeLayer.when(() => {
-          originalRenderer = routeLayer.renderer.clone();
-        });
-    
-        // Add event listener for pin click
-        arcgisMap.view.on("click", (event) => {
-          // Perform a hitTest to see if a canyon pin was clicked
-          arcgisMap.view.hitTest(event).then((response) => {
-            // Check if a feature from canyonLayer0 was clicked
-            const canyonFeature = response.results.find(
-              result => result.graphic.layer === canyonLayer0
-            );
-            
-            if (canyonFeature) {
-              // Get the Location value from the clicked pin
-              const location = canyonFeature.graphic.attributes.Location;
-              
-              // Create a renderer for highlighting the matching route
-              const highlightRenderer = new SimpleRenderer({
-                symbol: new SimpleLineSymbol({
-                  color: "inherit",
-                  width: 3
-                }),
-                visualVariables: [{
-                  type: "opacity",
-                  valueExpression: `$feature.CanyonName == '${location}' ? 1 : 0.2`, // Full opacity for match, faded for others
-                  legendOptions: {
-                    showLegend: false
-                  }
-                }]
-              });
-              
-              // Apply the new renderer
-              routeLayer.renderer = highlightRenderer;
-            } else {
-              // If click is not on a canyon pin, reset to original renderer
-              if (originalRenderer) {
-                routeLayer.renderer = originalRenderer;
-              }
-            }
-          });
-        });
-      });
-    });
+	require([
+	  "esri/layers/FeatureLayer", 
+	  "esri/renderers/SimpleRenderer",
+	  "esri/symbols/SimpleLineSymbol",
+	  "esri/core/watchUtils"
+	], (FeatureLayer, SimpleRenderer, SimpleLineSymbol, watchUtils) => {
+	  
+	  const arcgisMap = document.querySelector("arcgis-map");
+	  arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+	    
+	    // Define your layers as before
+	    const popupCanyons = {
+	      title: "{Location}",
+	      content: /* your popup content */
+	    };
+	
+	    const canyonLayer0 = new FeatureLayer({
+	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
+	      popupTemplate: popupCanyons
+	    });
+	
+	    arcgisMap.addLayer(canyonLayer0);
+	
+	    const canyonLayer1 = new FeatureLayer({
+	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
+	    });
+	
+	    arcgisMap.addLayer(canyonLayer1);
+	
+	    const routeLayer = new FeatureLayer({
+	      url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
+	    });
+	
+	    arcgisMap.addLayer(routeLayer, 0);
+	    
+	    // Store the original renderer
+	    let originalRenderer;
+	    
+	    // When the route layer is loaded, store its original renderer
+	    routeLayer.when(() => {
+	      originalRenderer = routeLayer.renderer.clone();
+	    });
+	
+	    // Set up click event
+	    arcgisMap.view.on("click", (event) => {
+	      arcgisMap.view.hitTest(event).then((response) => {
+	        // Check if a feature from canyonLayer0 was clicked
+	        const canyonFeature = response.results.find(
+	          result => result.layer === canyonLayer0
+	        );
+	        
+	        if (canyonFeature) {
+	          // Get the Location value from the clicked pin
+	          const location = canyonFeature.graphic.attributes.Location;
+	          
+	          // Use a unique value renderer to maintain original colors but fade non-matching routes
+	          routeLayer.effect = {
+	            filter: {
+	              where: `CanyonName = '${location}'`
+	            },
+	            excludedEffect: "opacity(0.2)" // non-matching features will be 20% opacity
+	          };
+	        } else {
+	          // Reset to original state if click is not on a canyon pin
+	          routeLayer.effect = null;
+	        }
+	      });
+	    });
+	  });
+	});
     </script>
 
   </body>
