@@ -141,9 +141,9 @@
 	      
         arcgisMap.addLayer(routeLayer);
 	    
-	view.when(() => {
-	    view.on("click", (event) => {
-	      view.hitTest(event).then((response) => {
+	mapView.when(() => {
+	    mapView.on("click", (event) => {
+	      mapView.hitTest(event).then((response) => {
 	        if (response.results.length > 0) {
 	          const feature = response.results[0].graphic;
 	          const canyonName = feature.attributes.CanyonName; // Get the selected canyon's name
