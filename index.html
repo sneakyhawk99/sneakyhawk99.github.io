@@ -143,6 +143,12 @@
       });
 
     });
+    // Open the Introduction tab by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+    	document.getElementById("intro").style.display = "block"; // Show intro tab
+    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
+    });
+
     </script>
 
   </body>
