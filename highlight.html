@@ -43,12 +43,12 @@
 
   <body>
 
-    <arcgis-map basemap="arcgis/topographic" center="-111.427031,39.212335" zoom="7.5">
+    <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
       <arcgis-zoom position="top-right"></arcgis-zoom>
     </arcgis-map>
 	  
     <!-- interface pannel on side  --> 
-    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); /* box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; */ max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
@@ -106,22 +106,21 @@
 	    
     // ArcGIS map layers set up
     require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
-	    
+      
       const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", (event) => {
-	const view = event.detail.view; //get the map view
+      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
         
         // Define a pop-up for canyon
-//         const popupCanyons = {
-//          title: "{Location}",
-//          content:
-//            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
-//        };
+        const popupCanyons = {
+          title: "{Location}",
+          content:
+            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
+        };
 
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-          //popupTemplate: popupCanyons
+          popupTemplate: popupCanyons
         });
 
         arcgisMap.addLayer(canyonLayer0);
@@ -136,35 +135,41 @@
         // Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
-        });
+	  outFields: ["CanyonName"]
 
         arcgisMap.addLayer(routeLayer);
 
-	// Wait until the routeLayer is ready
-	view.whenLayerView(routeLayer).then((routeLayerView) => {
+	view.when(() => {
+	    view.on("click", (event) => {
+	      view.hitTest(event).then((response) => {
+	        if (response.results.length > 0) {
+	          const feature = response.results[0].graphic;
+	          const canyonName = feature.attributes.CanyonName; // Get the selected canyon's name
 	
-	view.on("click", (event) => {
-	view.hitTest(event).then((response) => {
-	  let results = response.results.filter((r) => r.graphic.layer === canyonLayer0);
-	  
-	  if (results.length > 0) {
-	    let selectedFeature = results[0].graphic;
-	    let locationName = selectedFeature.attributes.Location; // Extract canyon name
-	
-	    // Apply featureEffect to the routeLayer based on "CanyonName"
-	    routeLayerView.featureEffect = {
-	      filter: { where: `CanyonName = '${locationName}'` },
-	      includedEffect: "bloom(1.5, 2px, 0.3) opacity(1)", // Bright halo effect
-	      excludedEffect: "opacity(0.2) grayscale(100%)" // Fade other routes
-	    };
-	  }
-	});
+	          // Apply feature effect
+	          canyonLayer.featureEffect = {
+	            filter: {
+	              where: `CanyonName = '${canyonName}'` // Select all matching canyon segments
+	            },
+	            includedEffect: "bloom(2, 1.5px, 0px)", // Highlight selected canyon
+	            excludedEffect: "opacity(30%)" // Fade out other canyons
+	          };
+	        }
+	      });
+	    });
 	});
       });
-
     });
+    // Open the Introduction tab by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+    	document.getElementById("intro").style.display = "block"; // Show intro tab
+    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
+    });
+
     </script>
 
   </body>
+
+</html>
 
 </html>
