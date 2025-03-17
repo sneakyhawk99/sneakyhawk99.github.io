@@ -147,7 +147,7 @@
 	          const canyonName = feature.attributes.CanyonName; // Get the selected canyon's name
 	
 	          // Apply feature effect
-	          canyonLayer.featureEffect = {
+	          routeLayer.featureEffect = {
 	            filter: {
 	              where: `CanyonName = '${canyonName}'` // Select all matching canyon segments
 	            },
