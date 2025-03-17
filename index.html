@@ -135,11 +135,30 @@
         // Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
+	  outFields: ["CanyonName"]
         });
 
-        arcgisMap.addLayer(routeLayer, 0);
+        arcgisMap.addLayer(routeLayer);
 
+	view.on("click", (event) => {
+	  view.hitTest(event).then((response) => {
+	    if (response.results.length > 0) {
+	      const feature = response.results[0].graphic;
+	      const canyonName = feature.attributes.CanyonName; // Get the selected canyon's name
+	
+	      // Apply feature effect
+	      canyonLayer.featureEffect = {
+	        filter: {
+	          where: `CanyonName = '${canyonName}'` // Select all matching canyon segments
+	        },
+	        includedEffect: "bloom(2, 1.5px, 0px)", // Bright halo effect
+	        excludedEffect: "opacity(30%)" // Fade out other canyons
+	      };
+	    }
+	  });
+	});
 
+	
       });
 
     });
