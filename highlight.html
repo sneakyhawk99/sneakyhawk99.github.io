@@ -109,6 +109,7 @@
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+      mapView = arcgisMap.view;
         
         // Define a pop-up for canyon
         const popupCanyons = {
@@ -139,11 +140,6 @@
         });
 	      
         arcgisMap.addLayer(routeLayer);
-
-	const view = new MapView({
-	  container: arcgisMap,
-	  map: arcgisMap
-	});
 	    
 	view.when(() => {
 	    view.on("click", (event) => {
