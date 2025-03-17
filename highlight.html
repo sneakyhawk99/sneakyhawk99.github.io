@@ -140,6 +140,11 @@
 	      
         arcgisMap.addLayer(routeLayer);
 
+	const view = new MapView({
+	  container: arcgisMap,
+	  map: arcgisMap
+	});
+	    
 	view.when(() => {
 	    view.on("click", (event) => {
 	      view.hitTest(event).then((response) => {
