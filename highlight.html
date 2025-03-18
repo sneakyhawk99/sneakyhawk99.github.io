@@ -118,6 +118,14 @@
             "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
         };
 
+        // Canyon route layer (lines)
+        const routeLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
+	  outFields: ["CanyonName"]
+        });
+	      
+        arcgisMap.addLayer(routeLayer);
+	      
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
@@ -130,16 +138,6 @@
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
-
-        arcgisMap.addLayer(canyonLayer1);
-
-        // Canyon route layer (lines)
-        const routeLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
-	  outFields: ["CanyonName"]
-        });
-	      
-        arcgisMap.addLayer(routeLayer);
 	    
 	mapView.when(() => {
 	    mapView.on("click", (event) => {
