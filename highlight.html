@@ -153,15 +153,15 @@
 	            filter: {
 	              where: `CanyonName = '${canyonName}'` // Select all matching canyon segments
 	            },
-	            includedEffect: "bloom(2, 1.5px, 0px)", // Highlight selected canyon
+	            includedEffect: "bloom(2, 1.5px, 0%)", // Highlight selected canyon
 	            excludedEffect: "opacity(30%)" // Fade out other canyons
 	          };
 	        }
-	      });
-	    }); //mapview click
-	}); //mapview.when
-      }); //arcgis event listener
-    }); //require
+	      }); 	//hittest
+	    }); 	//mapview click
+	}); 		//mapview.when
+      }); 		//arcgis event listener
+    }); 		//require
     // Open the Introduction tab by default when the page loads
     document.addEventListener("DOMContentLoaded", function () {
     	document.getElementById("intro").style.display = "block"; // Show intro tab
