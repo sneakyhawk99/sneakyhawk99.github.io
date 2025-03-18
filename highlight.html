@@ -156,7 +156,10 @@
 	            includedEffect: "bloom(2, 2.5px, 0%)", // Highlight selected canyon
 	            excludedEffect: "opacity(30%)" // Fade out other canyons
 	          };
-	        }
+	        }	//if result > 0
+		else {
+		    routeLayer.featureEffect = null;
+		}
 	      }); 	//hittest
 	    }); 	//mapview click
 	}); 		//mapview.when
