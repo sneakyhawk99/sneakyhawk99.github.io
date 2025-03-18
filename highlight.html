@@ -147,7 +147,7 @@
 	        if (response.results.length > 0) {
 	          const clickedFeature = response.results[0].graphic;
 			if (clickedFeature.layer === canyonLayer0) {
-		          const location = clickedFeature.attributes.location; // Get the selected canyon's name from the pin layer
+		          const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
 		
 		          // Apply feature effect on the route layer
 		          routeLayer.featureEffect = {
