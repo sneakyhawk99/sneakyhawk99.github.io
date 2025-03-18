@@ -153,11 +153,11 @@
 	            filter: {
 	              where: `CanyonName = '${canyonName}'` // Select all matching canyon segments
 	            },
-	            includedEffect: "bloom(2, 2.5px, 0%)", // Highlight selected canyon
+	            includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
 	            excludedEffect: "opacity(60%)" // Fade out other canyons
 	          };
 		} else {
-		    routeLayer.featureEffect = null;
+		    routeLayer.featureEffect = null; //not working
 		}
 	      }); 	//hittest
 	    }); 	//mapview click
