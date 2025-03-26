@@ -14,7 +14,7 @@ body {
 
 /* Header Styles */
 header {
-    background: #333;
+    background: #9e5816;
     color: white;
     padding: 2rem 0;
     text-align: center;
@@ -30,7 +30,7 @@ header p {
 
 /* Navigation Styles */
 nav {
-    background: #444;
+    background: #c98e57;
     padding: 0.8rem 0;
     text-align: center;
 }
