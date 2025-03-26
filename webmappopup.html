@@ -44,11 +44,11 @@
   <body>
 
     <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
-      <arcgis-zoom position="top-right"></arcgis-zoom>
+      <arcgis-zoom position="bottom-right"></arcgis-zoom>
     </arcgis-map>
 	  
     <!-- interface pannel on side  --> 
-    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); /* box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; */ max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
 	<!-- Tab links -->
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
@@ -105,67 +105,76 @@
     }
 	    
     // ArcGIS map layers set up
-      require(["esri/layers/FeatureLayer", "esri/widgets/Popup", "esri/MapView", "esri/Map"], (FeatureLayer, Popup, MapView, Map) => {
-        const arcgisMap = new Map({
-          basemap: "topographic"
-        });
-
-        const view = new MapView({
-          container: "arcgis-map", // Ensure this is connected to the arcgis-map element
-          map: arcgisMap,
-          center: [-111.427031, 39.212335],
-          zoom: 7.5
-        });
+    require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
+      
+      const arcgisMap = document.querySelector("arcgis-map");
+      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+      mapView = arcgisMap.view;
         
-        //Enable popup docking and configure it
-	const popup = new Popup({
-	  dockEnabled: true,
-	  dockOptions: {
-		//Disables the dock button
-		buttonEnabled: false,
-		//Position of dock
-		position: "bottom-right",
-		//ignore default sizes that trigger responsive docking
-		breakpoint: false
-	  }
-	});
-
-	view.popup = popup;
-	      
-	// Define a pop-up for canyon
+        // Define a pop-up for canyon
         const popupCanyons = {
           title: "{Location}",
           content:
-            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br>"
+            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information:</b> {Links}<br>"
         };
 
+        // Canyon route layer (lines)
+        const routeLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
+	  outFields: ["CanyonName"]
+        });
+	      
+        arcgisMap.addLayer(routeLayer);
+	      
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
           popupTemplate: popupCanyons
         });
 
-        arcgisMap.add(canyonLayer0);
+        arcgisMap.addLayer(canyonLayer0);
 
         // Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
 
-        arcgisMap.add(canyonLayer1);
-
-        // Canyon route layer (lines)
-        const routeLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3"
-        });
-
-        arcgisMap.add(routeLayer);
-
-      });
-
+	arcgisMap.addLayer(canyonLayer1);
+	    
+	mapView.when(() => {
+	    mapView.on("click", (event) => {
+	      mapView.hitTest(event).then((response) => {
+	        if (response.results.length > 0) {
+	          const clickedFeature = response.results[0].graphic;
+			if (clickedFeature.layer === canyonLayer0) {
+		          const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
+		
+		          // Apply feature effect on the route layer
+		          routeLayer.featureEffect = {
+		            filter: {
+		              where: `CanyonName = '${location}'` // Select all matching canyon segments
+		            },
+		            includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
+		            excludedEffect: "opacity(40%)" // Fade out other canyons
+		          }; 	//featureEffect
+			}
+		} else {
+		    routeLayer.featureEffect = null; //not working
+		}
+	      }); 	//hittest
+	    }); 	//mapview click
+	}); 		//mapview.when
+      }); 		//arcgis event listener
+    }); 		//require
+    // Open the Introduction tab by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+    	document.getElementById("intro").style.display = "block"; // Show intro tab
+    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
+    });
 
     </script>
 
   </body>
 
 </html>
+
