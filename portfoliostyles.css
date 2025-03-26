@@ -154,3 +154,16 @@ footer {
     margin-top: 2rem;
     font-size: 0.9rem;
 }
+.pdf-thumb {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.pdf-thumb:hover {
+    transform: scale(1.05);
+}
