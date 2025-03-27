@@ -130,6 +130,13 @@ nav a:hover {
     transform: scale(1.05);
 }
 
+#maps .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Flexible columns */
+    gap: 20px;  /* Space between images */
+    padding: 20px;
+}
+
 /* Links List */
 ul {
     list-style: none;
