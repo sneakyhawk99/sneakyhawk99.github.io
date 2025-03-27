@@ -116,7 +116,7 @@ nav a:hover {
     height: auto;
     object-fit: contain;
     border-radius: 8px;
-    border:1px solid #e0c2b4;
+    border:1px solid #333;
     transition: transform 0.2s;
 }
 
