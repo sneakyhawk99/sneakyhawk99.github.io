@@ -43,7 +43,8 @@
 
   <body>
 
-    <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
+    //this part is different with the custom base map
+    <arcgis-map center="-111.427031, 39.212335" zoom="7.5">
       <arcgis-zoom position="bottom-right"></arcgis-zoom>
     </arcgis-map>
 	  
@@ -106,11 +107,17 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/widgets/Legend"], (FeatureLayer, Legend) => {
+    require(["esri/layers/FeatureLayer", "esri/layers/TileLayer", "esri/widgets/Legend"], (FeatureLayer, TileLayer Legend) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-      mapView = arcgisMap.view;
+        mapView = arcgisMap.view;
+
+	const customBasemap = new TileLayer({
+	  urlTemplate: "https://discover.agrc.utah.gov/login/path/traffic-ski-gyro-beast/tiles/terrain_basemap/{level}/{col}/{row}"
+	});
+
+	mapView.map.basemap.baseLayers = [customBasemap];
         
         // Define a pop-up for canyon
         const popupCanyons = {
