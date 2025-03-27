@@ -107,7 +107,7 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/layers/TileLayer", "esri/widgets/Legend"], (FeatureLayer, TileLayer, Legend) => {
+    require(["esri/layers/FeatureLayer", "esri/layers/WebTileLayer", "esri/widgets/Legend"], (FeatureLayer, WebTileLayer, Legend) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
