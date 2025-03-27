@@ -113,9 +113,21 @@ nav a:hover {
 /* Map Gallery Styles */
 #maps .grid img {
     width: 100%;
-    height: 220px;
-    object-fit: cover;
+    height: auto;
+    object-fit: contain;
     border-radius: 8px;
+    border:1px solid #e0c2b4;
+    transition: transform 0.2s;
+}
+
+#maps .grid a {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+#maps .grid img:hover {
+    transform: scale(1.05);
 }
 
 /* Links List */
