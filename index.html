@@ -59,6 +59,7 @@
 	<!-- Tab Content -->    
 	<div id="intro"	class="tabcontent">
 		<img src="canyoneering.JPG" width="200px" style="display: block; margin: 0 auto; margin-top: 45px; width: 300px;">
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">Johnson's Canyon, Snow Canyon State Park<br></p>
 		<h2>An Introduction to Technical Canyoneering Routes in Utah</h2>
 		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">By Andrew Ashton<br></p>
 		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">Source: <a href="https://ropewiki.com/Utah">Ropewiki.com/Utah</a><br></p>
@@ -142,6 +143,14 @@
 	arcgisMap.addLayer(canyonLayer1);
 	    
 	mapView.when(() => {
+	    // Dock the popup to top-right
+	    mapView.popup.dockEnabled = true;
+	    mapView.popup.dockOptions = {
+	      buttonEnabled: false,      // Optional: removes the dock button
+	      position: "top-right",     // Dock to top-right
+	      breakpoint: false          // Always docked, even on large screens
+	    };
+		
 	    mapView.on("click", (event) => {
 	      mapView.hitTest(event).then((response) => {
 	        if (response.results.length > 0) {
@@ -177,4 +186,3 @@
   </body>
 
 </html>
-
