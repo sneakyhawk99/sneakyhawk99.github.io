@@ -106,23 +106,23 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer"], (FeatureLayer) => {
+    require(["esri/layers/FeatureLayer", "esri/widgets/Legend"], (FeatureLayer, Legend) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-      mapView = arcgisMap.view;
-        
+        mapView = arcgisMap.view;
+
         // Define a pop-up for canyon
         const popupCanyons = {
           title: "{Location}",
           content:
-            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information:</b> {Links}<br>"
+            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information:</b> {links_1}<br>"
         };
 
         // Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
-	  outFields: ["CanyonName"]
+	        outFields: ["CanyonName"]
         });
 	      
         arcgisMap.addLayer(routeLayer);
@@ -140,39 +140,53 @@
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
 
-	arcgisMap.addLayer(canyonLayer1);
-	    
-	mapView.when(() => {
-	    // Dock the popup to top-right
-	    mapView.popup.dockEnabled = true;
-	    mapView.popup.dockOptions = {
-	      buttonEnabled: false,      // Optional: removes the dock button
-	      position: "top-right",     // Dock to top-right
-	      breakpoint: false          // Always docked, even on large screens
-	    };
-		
-	    mapView.on("click", (event) => {
-	      mapView.hitTest(event).then((response) => {
-	        if (response.results.length > 0) {
-	          const clickedFeature = response.results[0].graphic;
-			if (clickedFeature.layer === canyonLayer0) {
-		          const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
-		
-		          // Apply feature effect on the route layer
-		          routeLayer.featureEffect = {
-		            filter: {
-		              where: `CanyonName = '${location}'` // Select all matching canyon segments
-		            },
-		            includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
-		            excludedEffect: "opacity(40%)" // Fade out other canyons
-		          }; 	//featureEffect
-			}
-		} else {
-		    routeLayer.featureEffect = null; //not working
-		}
-	      }); 	//hittest
-	    }); 	//mapview click
-	}); 		//mapview.when
+      	arcgisMap.addLayer(canyonLayer1);
+      	    
+      	mapView.when(() => {
+      	    // Dock the popup to top-right
+      	    mapView.popup.dockEnabled = true;
+      	    mapView.popup.dockOptions = {
+      	      buttonEnabled: false,      // Optional: removes the dock button
+      	      position: "top-right",     // Dock to top-right
+      	      breakpoint: false          // Always docked, even on large screens
+      	    };
+
+        // Add a legend for routeLayer
+        const legend = new Legend({
+          view: mapView,
+          layerInfos: [
+            {
+              layer: routeLayer,
+              title: "Route Legend"
+            }
+          ]
+        });
+
+        // Add the legend to the bottom-right
+        mapView.ui.add(legend, "bottom-right");
+          
+        mapView.on("click", (event) => {
+          mapView.hitTest(event).then((response) => {
+            if (response.results.length > 0) {
+              const clickedFeature = response.results[0].graphic;
+              if (clickedFeature.layer === canyonLayer0) {
+                      const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
+            
+                      // Apply feature effect on the route layer
+                      routeLayer.featureEffect = {
+                        filter: {
+                          where: `CanyonName = '${location}'` // Select all matching canyon segments
+                        },
+                        includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
+                        excludedEffect: "opacity(40%)" // Fade out other canyons
+                      }; 	//featureEffect
+            	}
+            	} else {
+            		  routeLayer.featureEffect = null; //not working
+            	}
+      	    }); 	//hittest
+      	  }); 	//mapview click
+      	}); 		//mapview.when
       }); 		//arcgis event listener
     }); 		//require
     // Open the Introduction tab by default when the page loads
@@ -186,4 +200,3 @@
   </body>
 
 </html>
-
