@@ -116,7 +116,9 @@
         const popupCanyons = {
           title: "{Location}",
           content:
-            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information:</b> {links_1}<br>"
+            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br>
+		  <b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information:</b> {links_1}<br>"
+	  action: [{title: "More Info", id: "info", className: "esri-icon-link}]
         };
 
         // Canyon route layer (lines)
@@ -185,8 +187,9 @@
             		  routeLayer.featureEffect = null; //not working
             	}
       	    }); 	//hittest
-      	  }); 	//mapview click
+      	  }); 		//mapview click
       	}); 		//mapview.when
+	reactiveUtils //to work on on Monday
       }); 		//arcgis event listener
     }); 		//require
     // Open the Introduction tab by default when the page loads
