@@ -54,6 +54,7 @@
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
 		<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
 		<button class="tablinks" onclick="openTab(event, 'filter')">Filter Tool</button>
+		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer;">Close Tab</button>
 	</div>
 			
 	<!-- Tab Content -->    
@@ -233,6 +234,18 @@
     	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
     });
 
+    // close tab stuff 
+    document.getElementById("closeTabBtn").addEventListener("click", function () {
+        var tabcontent = document.getElementsByClassName("tabcontent");
+        for (var i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none"; // Hide all tabs
+        }
+
+        var tablinks = document.getElementsByClassName("tablinks");
+        for (var i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+        }
+	    
     </script>
 
   </body>
