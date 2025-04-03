@@ -122,14 +122,7 @@
 		{
 		title: "More Info", 
 		id: "info", 
-		className: "esri-icon-link"
-		handler: function (event) {
-			const feature = event.target;
-			const linkUrl = feature.attributes.links_1; // Get the URL from the 'links_1' field
-			if (linkUrl) {
-			  window.open(linkUrl, "_blank"); // Open the URL in a new tab
-			}
-		}	
+		className: "esri-icon-link"	
 	  }]
         };
 
@@ -164,7 +157,20 @@
       	      position: "top-right",     // Dock to top-right
       	      breakpoint: false          // Always docked, even on large screens
       	    };
-
+	// Handle popup action clicks (for "More Info" button)
+	mapView.popup.on("trigger-action", function (event) {
+	    if (event.action.id === "info") {
+		let feature = mapView.popup.selectedFeature;
+		if (feature && feature.attributes) {
+		    let linkUrl = feature.attributes.links_1;
+		    if (linkUrl) {
+			window.open(linkUrl, "_blank"); // Open URL in new tab
+		    } else {
+			console.warn("No link found.");
+		    }
+		}
+	    }
+	});
         // Add a legend for routeLayer
         const legend = new Legend({
           view: mapView,
