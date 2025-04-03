@@ -223,7 +223,10 @@
                       }; 	//featureEffect
             	}
             	} else {
-            		  routeLayer.featureEffect = null; //not working
+            		  routeLayer.featureEffect = { //not working
+				  filter: null,
+				  includedEffect: null,
+				  excludedEffect: null
             	}
       	    }); 	//hittest
       	  }); 		//mapview click
