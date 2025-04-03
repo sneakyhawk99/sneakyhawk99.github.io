@@ -157,20 +157,47 @@
       	      position: "top-right",     // Dock to top-right
       	      breakpoint: false          // Always docked, even on large screens
       	    };
-	// Handle popup action clicks (for "More Info" button)
-	mapView.popup.on("trigger-action", function (event) {
-	    if (event.action.id === "info") {
-		let feature = mapView.popup.selectedFeature;
-		if (feature && feature.attributes) {
-		    let linkUrl = feature.attributes.links_1;
-		    if (linkUrl) {
-			window.open(linkUrl, "_blank"); // Open URL in new tab
-		    } else {
-			console.warn("No link found.");
-		    }
+	reactiveUtils.watch(
+		() => mapView.popup,
+		(popup) => {
+			console.log(popup);
+			popup.dockOptions.buttonEnabled= false;
+			popup.visibleElements.collapseButton = false;
+			popup.visibleElements.actionBar = false;
+			popup.visibleElements.featureNavigation = false;
 		}
-	    }
-	});
+	);
+
+	reactiveUtils.on(
+		() = mapView.popup,
+		"Trigger-action",
+		(event) => {
+			if (event.action.id === "info") {
+				const feature = mapView.popup.selectedFeature;
+				if (feature && feature.attributes) {
+		    			const linkUrl = feature.attributes.links_1;
+					if (linkUrl) {
+						window.open(linkUrl, "_blank"); // Open URL in new tab
+		    			}
+				}
+			}
+		});
+		
+		
+	// Handle popup action clicks (for "More Info" button)
+	//mapView.popup.on("trigger-action", function (event) {
+	  //  if (event.action.id === "info") {
+	//	let feature = mapView.popup.selectedFeature;
+	//	if (feature && feature.attributes) {
+	//	    let linkUrl = feature.attributes.links_1;
+	//	    if (linkUrl) {
+	//		window.open(linkUrl, "_blank"); // Open URL in new tab
+	//	    } else {
+	//		console.warn("No link found.");
+	//	    }
+	//	}
+	//    }
+	//});
         // Add a legend for routeLayer
         const legend = new Legend({
           view: mapView,
