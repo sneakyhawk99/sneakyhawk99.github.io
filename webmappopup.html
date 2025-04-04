@@ -159,7 +159,7 @@
       	    };
 	reactiveUtils.watch(
 		() => mapView.popup,
-		if (popup) => {
+		(popup) => {
 			console.log(popup);
 			popup.dockOptions.buttonEnabled= false;
 			popup.visibleElements.collapseButton = false;
