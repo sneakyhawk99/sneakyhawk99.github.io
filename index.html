@@ -164,6 +164,8 @@
 		className: "esri-icon-link"	
 	  }],
 	  // I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
+	  // for most of them I'm just pulling the value of the field. I have a query for duration, distance, number of rappels, and longest rappel
+	  // duration has its own constant because I am pulling from two different fields
 	  content: (feature) => {
 		const attrs = feature.graphic.attributes;
 		    console.log(attrs);
@@ -204,7 +206,7 @@
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
           popupTemplate: popupCanyons,
-	  outField: [*]
+	  outFields: ["*"]
         });
 
         arcgisMap.addLayer(canyonLayer0);
