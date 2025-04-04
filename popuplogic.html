@@ -153,7 +153,7 @@
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
         mapView = arcgisMap.view;
 
-        // Define a pop-up for canyon
+        // Define a pop-up for canyon, this one has 0's where it should be "No data"
 //        const popupCanyons = {
 //          title: "{Location}",
 //          	  overwriteActions: true,
@@ -196,18 +196,6 @@
               
             `;
 		  //<b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
-	    setTimeout(() => {
-	      const popupMainContainer = document.querySelector(".esri-popup__main-container");
-	      const popupContentContainer = document.querySelector(".esri-popup__content");
-	
-	      if (popupMainContainer && popupContentContainer) {
-		const contentWidth = popupContentContainer.scrollWidth;
-		popupMainContainer.style.width = `${contentWidth + 20}px`; // Adding some padding to avoid clipping
-	      }
-	    }, 100);
-	
-	    return popupContent;
-
           }
         };
 
