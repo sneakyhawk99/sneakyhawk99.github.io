@@ -172,6 +172,7 @@
           overwriteActions: true,
           content: (feature) => {
             const attrs = feature.graphic.attributes;
+	    console.log(attrs);
         
             // Helper function to check for 0 and return "No data"
             const formatValue = (val, unit = "", suffix = "") => {
