@@ -1,0 +1,314 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <title>Technical Canyoneering Routes Utah</title>
+    <link rel="icon" type="image/png" href="desertfavicon.png">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+      html, body {
+        padding: 0;
+        margin: 0;
+        height: 100%;
+        width: 100%;
+      }
+      arcgis-map {
+        display: block;
+        height: 100vh; /* Full height */
+        width: 100vw;
+      }
+      
+    </style>
+
+    <script>
+      var esriConfig = {
+        apiKey: "AAPTxy8BH1VEsoebNVZXo8HurCUGQrXu3erpYf0aHrvNXlY2k_bHzGoRbEOMeM4CovQLQ4_5TDEXRExKbeJ3G1gzUztP-y2kZBZaQAZUTxjwO3XIGYBNBBQ9fCXGLyy2xrH6UWabeLBjzxxsTVZkajEazOjaXx1a4u-FDW1L_zcutIqIe397yc7pDNGcyPJoFXHCwbaZkZ1amHxvnMRDfu2hMnE36f1fM8rdhpbEEzSW_CE.AT1_2TyVjxUD"
+      };
+    </script>
+
+    <!-- Load Calcite components from CDN -->
+    <script type="module" src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"></script>
+
+    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+    <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
+    <script src="https://js.arcgis.com/4.32/"></script>
+
+    <!-- Load Map components from CDN-->
+    <script
+      type="module"
+      src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"
+    ></script>
+
+  </head>
+
+  <body>
+
+    <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
+      <arcgis-zoom position="bottom-right"></arcgis-zoom>
+    </arcgis-map>
+	  
+    <!-- interface pannel on side  --> 
+    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+	<!-- Tab links -->
+	<div class="tab">
+		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
+		<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
+		<button class="tablinks" onclick="openTab(event, 'filter')">Filter Tool</button>
+	</div>
+			
+	<!-- Tab Content -->    
+	<div id="intro"	class="tabcontent">
+		<img src="canyoneering.JPG" width="200px" style="display: block; margin: 0 auto; margin-top: 45px; width: 300px;">
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em; text-align: center;">Johnson's Canyon, Snow Canyon State Park<br></p>
+		<h2>An Introduction to Technical Canyoneering Routes in Utah</h2>
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">By Andrew Ashton<br></p>
+		<p style="font-size: 0.9em; font-style: italic; margin-block:0em">Source: <a href="https://ropewiki.com/Utah">Ropewiki.com/Utah</a><br></p>
+		<p>Utah’s stunning sandstone canyons, shaped by wind and water over millions of years, make it one of the best places for technical canyoneering. From Zion National Park 
+			to the remote San Rafael Swell, the state's rugged terrain offers both beauty and adventure for outdoor enthusiasts.</p>
+		<p>Technical canyoneering goes beyond hiking, requiring skills like rappelling, anchor setting, and navigating narrow, water-carved passages. Many routes feature sheer 
+			drops, deep pools, and tight squeezes, making preparation and technical knowledge essential. Whether you're an experienced canyoneer or a beginner with a guide, 
+			Utah’s canyons promise an unforgettable challenge in a world-class outdoor setting.</p>
+		<p>This map uses community-contributed data from RopeWiki to visually explore potential canyoneering routes. Each pin provides key details about a canyon, including its 
+			difficulty rating, number of rappels, and estimated duration. The routes are displayed to give an overview of their length and topography.</p>
+		<p><strong>Select a canyon to learn more, or use the Filter tab to refine results based on specific attributes. For more in-depth information, follow the provided links
+			to RopeWiki pages for each canyon.</strong></p>
+		<h2>Happy canyoneering!</h2>
+		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+	</div>
+	    
+	<div id="rating" class="tabcontent">
+		<br>
+		<h2>Canyoneering Ratings</h2>
+		<p>Canyons in Utah are rated using the American Canyon Association rating system, which includes four different categories. 
+			This rating is subjective and can change depending on local conditions and personal ability, but it is a good place to start when figuring out what to expect when exploring a canyon.</p>
+		<p>Rating Classifications:</p>
+		<h3>Number - Skill</h3>
+			<ul>
+			<li>1 - Normal hiking. Non-technical, climbing gear not required.<br><em>Typical Gear: slings (webbing), map and compass/GPS<br></em></li>
+			<li>2 - Basic Canyoneering: Hiking, scrambling, minor climbing up or down without need of a rope, possible hand-lines for emergency use. Retreat up canyon is possible without ropes.<br>
+			<li>3 - Intermediate Canyoneering: Technical Climbing and Rappelling. Climbing gear (rope) required. Single pitch rappels. Retreat up canyon not possible or requires fixed rope. <br>
+				<strong>This map is for exploring technical canyons, so most are 3 and above.</strong></li>
+			<li>4 - Advanced Canyoneering: Climbing and rappelling, aided climbing, multi-pitch rappels and/or complex rope work may be required. Might include pothole traps, tight squeezes, high-risk down-climbing, 
+				or have difficult anchor points.</li>
+			</ul>
+		<h3>Letter - Water</h3>
+			<ul>
+			<li>A - Typically dry or with very little water. Waist deep wading at most.</li>
+			<li>B - Still pools of water with no current. Seasons and weather change water levels or running water. Swimming is expected.</li>
+			<li>C - Water with strong current, waterfalls, wet canyon rope techniques.</li>
+			</ul>
+		<h3>Roman Numeral - Duration</h3>
+			<ul>
+			<li>I – Few hours at most</li>
+			<li>II - Half day.</li>
+			<li>III – All day most likely</li>
+			<li>IV – All day into the evening. </li>
+			<li>V – 1 ½ to 2 days</li>
+			<li>VI – 2 full days or more</li>
+			</ul>
+		<h3>Risk Factor</h3>
+			<p>If a rating is given a risk factor take extra care.</p>
+			<ul>
+			<li>No Rating - If the risk factor is G or PG, the risk rating is often not included</li>
+			<li>G - No significant risk</li>
+			<li>PG - Normal risk factors present</li>
+			<li>R - Risky. Solid technical skills, not for beginners, complicated descents.</li>
+			<li>X or XX - Extreme: Possible serious injury or death if care is not heeded. Multiple risks exist that will complicate the descent. Expert canyoneers only! Possible long and difficult rappels, multi pitch rappels, exposed climbing, up to 5th class technical climbing without rope use, prolonged exposure to cold water.</li>
+			</ul>
+		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+	</div>
+	    
+	<div id="filter" class="tabcontent">
+		<p>yo yo this is my filter tool</p>
+		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+	</div>
+    </div>
+    
+    <script>
+    //function to open the tab content
+    function openTab(evt, tabName) {
+	var i, tabcontent, tablinks;
+	    
+	// hide tab content
+	tabcontent = document.getElementsByClassName("tabcontent");
+	for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	}
+
+	//remove active class from all tabs
+	tablinks = document.getElementsByClassName("tablinks");
+	for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].classList.remove("active");
+	}
+
+	//show the clicked tab content and add active class to clicked tab
+	document.getElementById(tabName).style.display = "block";
+	evt.currentTarget.classList.add("active");
+    }
+	    
+    // ArcGIS map layers set up
+    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils"], (FeatureLayer, Legend, reactiveUtils) => {
+      
+      const arcgisMap = document.querySelector("arcgis-map");
+      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+        mapView = arcgisMap.view;
+
+        // Define a pop-up for canyon
+//        const popupCanyons = {
+//          title: "{Location}",
+//          	  overwriteActions: true,
+//              content:
+//                  "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information: </b><a href='{links_1}' target='_blank'>{links_1}</a><br>",
+//    	  actions: [
+//              {
+//              title: "More Info", 
+//              id: "info", 
+//              className: "esri-icon-link"	
+//              }]
+//        };
+
+        const popupCanyons = {
+          title: "{Location}",
+          overwriteActions: true,
+          content: (feature) => {
+            const attrs = feature.graphic.attributes;
+        
+            // Helper function to check for 0 and return "No data"
+            const formatValue = (val, unit = "", suffix = "") => {
+              return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
+            };
+        
+            const duration = (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0)) 
+              ? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
+              : "No data";
+        
+            return `
+              <b>Canyon:</b> ${attrs.Location}<br>
+              <b>Region:</b> ${attrs.Region}<br>
+              <b>Quality Rating:</b> ${attrs.Quality}<br>
+              <b>Technical Rating:</b> ${attrs.Rating}<br>
+              <b>Duration:</b> ${duration}<br>
+              <b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
+              <b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
+              <b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
+              <b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
+              <b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
+            `;
+          }
+        };
+
+        // Canyon route layer (lines)
+        const routeLayer = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
+	        outFields: ["CanyonName"]
+        });
+	      
+        arcgisMap.addLayer(routeLayer);
+	      
+        // Canyon pin feature layer (points)
+        const canyonLayer0 = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
+          popupTemplate: popupCanyons
+        });
+
+        arcgisMap.addLayer(canyonLayer0);
+
+        // Canyon dot feature layer (points)
+        const canyonLayer1 = new FeatureLayer({
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
+        });
+
+      	arcgisMap.addLayer(canyonLayer1);
+
+	// Dock the popup to top-right      
+      	mapView.when(() => {
+      	    mapView.popup.dockEnabled = true;
+      	    mapView.popup.dockOptions = {
+      	      buttonEnabled: false,      // Optional: removes the dock button
+      	      position: "top-right",     // Dock to top-right
+      	      breakpoint: false          // Always docked, even on large screens
+      	};
+
+	// Link thing at top of popup
+	reactiveUtils.on(
+		() => mapView.popup,
+		"trigger-action",
+		(event) => {
+			if (event.action.id === "info") {
+				const feature = mapView.popup.selectedFeature;
+				if (feature && feature.attributes) {
+		    			const linkUrl = feature.attributes.links_1;
+					if (linkUrl) {
+						window.open(linkUrl, "_blank"); // Open URL in new tab
+		    			}
+				}
+			}
+	});
+		
+        // Add a legend for routeLayer
+        const legend = new Legend({
+          view: mapView,
+          layerInfos: [
+            {
+              layer: routeLayer,
+              title: "Route Legend"
+            }
+          ]
+        });
+
+        // Add the legend to the bottom-right
+        mapView.ui.add(legend, "bottom-right");
+          
+        mapView.on("click", (event) => {
+          mapView.hitTest(event).then((response) => {
+            if (response.results.length > 0) {
+              const clickedFeature = response.results[0].graphic;
+              if (clickedFeature.layer === canyonLayer0) {
+                      const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
+            
+                      // Apply feature effect on the route layer
+                      routeLayer.featureEffect = {
+                        filter: {
+                          where: `CanyonName = '${location}'` // Select all matching canyon segments
+                        },
+                        includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
+                        excludedEffect: "opacity(40%)" // Fade out other canyons
+                      }; 	//featureEffect
+            	}
+            	} else {
+            		  routeLayer.featureEffect = { //not working
+				  filter: null,
+				  includedEffect: null,
+				  excludedEffect: null
+            	}
+	    	}	
+      	    }); 	//hittest
+      	  }); 		//mapview click
+      	}); 		//mapview.when
+      }); 		//arcgis event listener
+    }); 		//require
+	    
+    // Open the Introduction tab by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+    	document.getElementById("intro").style.display = "block"; // Show intro tab
+    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
+    });
+
+    // close tab stuff 
+    document.getElementById("closeTabBtn").addEventListener("click", function () {
+        var tabcontent = document.getElementsByClassName("tabcontent");
+        for (var i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none"; // Hide all tabs
+        }
+
+        var tablinks = document.getElementsByClassName("tablinks");
+        for (var i = 0; i < tablinks.length; i++) {
+            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+        }
+    });
+	    
+    </script>
+
+  </body>
+
+</html>
