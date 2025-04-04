@@ -25,12 +25,4 @@
 .tab button.active {
   background-color: #ccc;
 }
-/* CSS to style the popups and control their width */
-.esri-popup__main-container {
-  max-width: none !important; /* Remove the default max-width */
-  width: auto !important; /* Ensure the width is based on content */
- }
 
-.esri-popup__content {
-  width: auto !important; /* Allow content width to adjust */
-}
