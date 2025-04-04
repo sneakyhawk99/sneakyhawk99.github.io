@@ -157,14 +157,38 @@
         const popupCanyons = {
           title: "{Location}",
 	  overwriteActions: true,
-          content:
-            "<b>Canyon:</b> {Location}<br><b>Region:</b> {Region}<br><b>Quality Rating:</b> {Quality}<br><b>Technical Rating:</b> {Rating}<br><b>Duration:</b> {MinTimeHrs}-{MaxTimeHrs}hrs<br><b>Distance:</b> {DistMi}mi<br> <b>Number of Rappels:</b> {Rappels}<br><b>Longest Rappel:</b> {LongestRFt}ft<br><b>Best Season:</b> {BestSeason}<br><b>More Information: </b><a href='{links_1}' target='_blank'>{links_1}</a><br>",
 	  actions: [
 		{
 		title: "More Info", 
 		id: "info", 
 		className: "esri-icon-link"	
-	  }]
+	  }],
+	  content: (feature) => {
+		const attrs = feature.graphic.attributes;
+		    console.log(attrs);
+	        
+	        // Helper function to check for 0 and return "No data"
+	        const formatValue = (val, unit = "", suffix = "") => {
+	        	return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
+	        };
+	        
+	        const duration = (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0)) 
+	              ? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
+	              : "No data";
+	        
+	        return `
+	              <b>Canyon:</b> ${attrs.Location}<br>
+	              <b>Region:</b> ${attrs.Region}<br>
+	              <b>Quality Rating:</b> ${attrs.Quality}<br>
+	              <b>Technical Rating:</b> ${attrs.Rating}<br>
+	              <b>Duration:</b> ${duration}<br>
+	              <b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
+	              <b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
+	              <b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
+	              <b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
+	              <b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
+	            `;
+          }
         };
 
         // Canyon route layer (lines)
