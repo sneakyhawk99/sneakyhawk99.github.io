@@ -182,16 +182,32 @@
         });
 
       	arcgisMap.addLayer(canyonLayer1);
-      	    
+
+	// Dock the popup to top-right      
       	mapView.when(() => {
-      	    // Dock the popup to top-right
       	    mapView.popup.dockEnabled = true;
       	    mapView.popup.dockOptions = {
       	      buttonEnabled: false,      // Optional: removes the dock button
       	      position: "top-right",     // Dock to top-right
       	      breakpoint: false          // Always docked, even on large screens
-      	    };
+      	};
 
+	// Link thing at top of popup
+	reactiveUtils.on(
+		() => mapView.popup,
+		"trigger-action",
+		(event) => {
+			if (event.action.id === "info") {
+				const feature = mapView.popup.selectedFeature;
+				if (feature && feature.attributes) {
+		    			const linkUrl = feature.attributes.links_1;
+					if (linkUrl) {
+						window.open(linkUrl, "_blank"); // Open URL in new tab
+		    			}
+				}
+			}
+	});
+		
         // Add a legend for routeLayer
         const legend = new Legend({
           view: mapView,
@@ -234,6 +250,7 @@
       	}); 		//mapview.when
       }); 		//arcgis event listener
     }); 		//require
+	    
     // Open the Introduction tab by default when the page loads
     document.addEventListener("DOMContentLoaded", function () {
     	document.getElementById("intro").style.display = "block"; // Show intro tab
