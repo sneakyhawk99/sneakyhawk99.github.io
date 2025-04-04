@@ -193,8 +193,21 @@
               <b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
               <b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
               <b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
-              <b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
+              
             `;
+		  //<b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
+	    setTimeout(() => {
+	      const popupMainContainer = document.querySelector(".esri-popup__main-container");
+	      const popupContentContainer = document.querySelector(".esri-popup__content");
+	
+	      if (popupMainContainer && popupContentContainer) {
+		const contentWidth = popupContentContainer.scrollWidth;
+		popupMainContainer.style.width = `${contentWidth + 20}px`; // Adding some padding to avoid clipping
+	      }
+	    }, 100);
+	
+	    return popupContent;
+
           }
         };
 
