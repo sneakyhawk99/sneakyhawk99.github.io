@@ -157,16 +157,6 @@
       	      position: "top-right",     // Dock to top-right
       	      breakpoint: false          // Always docked, even on large screens
       	    };
-	reactiveUtils.watch(
-		() => mapView.popup,
-		(popup) => {
-			console.log(popup);
-			popup.dockOptions.buttonEnabled= false;
-			popup.visibleElements.collapseButton = false;
-			popup.visibleElements.actionBar = false;
-			popup.visibleElements.featureNavigation = false;
-		}
-	);
 
 	reactiveUtils.on(
 		() => mapView.popup,
