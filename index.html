@@ -163,6 +163,7 @@
 		id: "info", 
 		className: "esri-icon-link"	
 	  }],
+	  // I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
 	  content: (feature) => {
 		const attrs = feature.graphic.attributes;
 		    console.log(attrs);
@@ -202,7 +203,7 @@
         // Canyon pin feature layer (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-          popupTemplate: popupCanyons
+          popupTemplate: popupCanyons,
 	  outField: [*]
         });
 
