@@ -230,7 +230,7 @@
 	        return `
 	              <b>Canyon:</b> ${attrs.Location}<br>
 	              <b>Region:</b> ${attrs.Region}<br>
-	              <b>Quality Rating:</b> ${attrs.Quality}<br>
+	              <b>Quality Rating:</b> ${formatValue(attrs.Quality, " stars")}<br>
 	              <b>Technical Rating:</b> ${attrs.Rating}<br>
 	              <b>Duration:</b> ${duration}<br>
 	              <b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
