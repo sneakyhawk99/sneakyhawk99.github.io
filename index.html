@@ -199,7 +199,7 @@
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
         mapView = arcgisMap.view;
 
-        // Define a pop-up for canyon
+        // Define a pop-up for canyonLayer0 my pin layer
         const popupCanyons = {
           title: "{Location}",
 	  overwriteActions: true, //allow for custom action bar
@@ -242,7 +242,7 @@
 		  //I took out the link portion because I got the icon thing to work. Here it is if I want to put in both
 		  //<b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
           }
-        };
+        };	
 
         // Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
@@ -263,7 +263,11 @@
 
         // Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2",
+	  popupTemplate: {
+		  title: "{Location}"
+		  content: null
+      	  }
         });
 
       	arcgisMap.addLayer(canyonLayer1);
