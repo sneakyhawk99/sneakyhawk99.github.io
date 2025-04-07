@@ -73,7 +73,7 @@
 		<p><strong>Select a canyon to learn more, or use the Filter Tool tab to refine results based on specific attributes. For more in-depth information, follow the provided links
 			to RopeWiki pages for each canyon.</strong></p>
 		<h2>Happy canyoneering!</h2>
-		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
 	    
 	<div id="rating" class="tabcontent">
@@ -115,7 +115,7 @@
 			<li>R - Risky. Solid technical skills, not for beginners, complicated descents.</li>
 			<li>X or XX - Extreme: Possible serious injury or death if care is not heeded. Multiple risks exist that will complicate the descent. Expert canyoneers only! Possible long and difficult rappels, multi pitch rappels, exposed climbing, up to 5th class technical climbing without rope use, prolonged exposure to cold water.</li>
 			</ul>
-		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
 	    
 	<div id="filter" class="tabcontent">
@@ -167,7 +167,7 @@
 		      <button id="clearFilterBtn" style="background-color: gray; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family); margin-left: 5px;">Clear</button>
 		      
 		      <br><br>
-		<button id="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
+		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
     </div>
     
@@ -343,18 +343,32 @@
     	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
     });
 
-    // close tab stuff 
-    document.getElementById("closeTabBtn").addEventListener("click", function () {
-        var tabcontent = document.getElementsByClassName("tabcontent");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none"; // Hide all tabs
-        }
+    // close tab stuff, need to fix
+//    document.getElementById("closeTabBtn").addEventListener("click", function () {
+//        var tabcontent = document.getElementsByClassName("tabcontent");
+//        for (var i = 0; i < tabcontent.length; i++) {
+//            tabcontent[i].style.display = "none"; // Hide all tabs
+//        }
 
-        var tablinks = document.getElementsByClassName("tablinks");
-        for (var i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-        }
-    });
+//        var tablinks = document.getElementsByClassName("tablinks");
+//        for (var i = 0; i < tablinks.length; i++) {
+//            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+//        }
+//    });
+
+	// close tab to work for all buttons
+	    document.querySelectorAll(".closeTabBt").forEach(btn => {
+		    btn.addEventListener("click", function () {
+			    var tabcontent = document.getElementsByClassName("tabcontent");\
+			    for (var i = 0; i < tabcontent.length; i++) {
+				 tabcontent[i].style.display = "none"; // Hide all tabs
+			    }
+			    var tablinks = document.getElementsByClassName("tablinks");
+			    for (var i = 0; i < tablinks.length; i++) {
+				    tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+			    }
+		    });
+	    });
 	    
     </script>
 
