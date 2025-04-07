@@ -358,11 +358,13 @@
 	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
 	
 	  canyonLayer1.definitionExpression = whereClause;
+	  canyonLayer0.definitionExpression = whereClause;
 	});
 	
 	// Clear filter
 	document.getElementById("clearFilterBtn").addEventListener("click", () => {
 	  canyonLayer1.definitionExpression = "1=1";
+	  canyonLayer0.definitionExpression = "1=1";
 	  document.getElementById("techRating").value = "";
 	  document.getElementById("waterRating").value = "";
 	  document.getElementById("duration").value = "";
