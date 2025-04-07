@@ -359,7 +359,35 @@
 	
 	  canyonLayer1.definitionExpression = whereClause;
 	  canyonLayer0.definitionExpression = whereClause;
+
+	// Query canyon layers to get matching canyon names to apply the affect on my routeLayer
+	const query = new Query();
+	query.where = whereClause;
+	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
+	query.returnDistinctValues = true;
+	
+	// Execute the query on canyonLayer0 and canyonLayer1
+	Promise.all([
+	canyonLayer0.queryFeatures(query),
+	canyonLayer1.queryFeatures(query)
+	])
+	.then(results => {
+	// Collect all matching canyon names
+	let matchingCanyonNames = [];
+	results.forEach(result => {
+	  result.features.forEach(feature => {
+	    matchingCanyonNames.push(feature.attributes.Location);
+	  });
 	});
+	
+	// Filter routeLayer based on matching canyon names
+	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+	routeLayer.definitionExpression = routeWhereClause;
+	})
+	.catch(error => {
+	console.error("Error querying canyon layers: ", error);
+	});
+	}); //filter tool .getdocumentby
 	
 	// Clear filter
 	document.getElementById("clearFilterBtn").addEventListener("click", () => {
@@ -369,7 +397,7 @@
 	  document.getElementById("waterRating").value = "";
 	  document.getElementById("duration").value = "";
 	  document.getElementById("risk").value = "";
-	});
+	}); //clear filter
       }); 		//arcgis event listener
     }); 		//require
 	    
