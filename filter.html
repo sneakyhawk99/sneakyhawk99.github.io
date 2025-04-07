@@ -209,7 +209,6 @@
 		id: "info", 
 		className: "esri-icon-link"	
 	  }],
-		
 	  // I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
 	  // for most of them I'm just pulling the value of the field. I have a query for duration, distance, number of rappels, and longest rappel
 	  // duration has its own constant because I am pulling from two different fields
@@ -243,7 +242,7 @@
           }
         };
 
-        // Canyon route layer (lines)
+        // define and add Canyon route layer (lines)
         const routeLayer = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
 	        outFields: ["CanyonName"]
@@ -251,7 +250,7 @@
 	      
         arcgisMap.addLayer(routeLayer);
 	      
-        // Canyon pin feature layer (points)
+        // define and add Canyon pin feature layer and its popup (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
           popupTemplate: popupCanyons,
@@ -260,7 +259,7 @@
 
         arcgisMap.addLayer(canyonLayer0);
 
-        // Canyon dot feature layer (points)
+        // define and add Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
         });
@@ -341,19 +340,6 @@
     	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
     });
 
-    // close tab stuff, need to fix
-//    document.getElementById("closeTabBtn").addEventListener("click", function () {
-//        var tabcontent = document.getElementsByClassName("tabcontent");
-//        for (var i = 0; i < tabcontent.length; i++) {
-//            tabcontent[i].style.display = "none"; // Hide all tabs
-//        }
-
-//        var tablinks = document.getElementsByClassName("tablinks");
-//        for (var i = 0; i < tablinks.length; i++) {
-//            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-//        }
-//    });
-
 	// close tab to work for all buttons
 	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
 		    btn.addEventListener("click", function () {
@@ -367,6 +353,44 @@
 			    }
 		    });
 	    });
+
+	//filter tool hopefully
+	document.getElementById("applyFilterBtn").addEventListener("click", () => {
+	  const tech = document.getElementById("techRating").value;
+	  const water = document.getElementById("waterRating").value;
+	  const duration = document.getElementById("duration").value;
+	  const risk = document.getElementById("risk").value;
+	
+	  let whereClauses = [];
+	
+	  // Build the query for Rating (format: 3B IV R)
+	  if (tech) {
+	    whereClauses.push(`Rating LIKE '${tech}%'`); // Check the technical part (e.g., "3" in "3B IV R")
+	  }
+	  if (water) {
+	    whereClauses.push(`Rating LIKE '%${water}%'`); // Check the water part (e.g., "B" in "3B IV R")
+	  }
+	  if (duration) {
+	    whereClauses.push(`Rating LIKE '%${duration}%'`); // Check the duration part (e.g., "IV" in "3B IV R")
+	  }
+	  if (risk) {
+	    whereClauses.push(`Rating LIKE '%${risk}%'`); // Check the risk part (e.g., "R" in "3B IV R")
+	  }
+	
+	  // Combine the clauses into a single WHERE expression
+	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
+	
+	  canyonsLayer.definitionExpression = whereClause;
+	});
+	
+	// Clear filter
+	document.getElementById("clearFilterBtn").addEventListener("click", () => {
+	  canyonsLayer.definitionExpression = "1=1";
+	  document.getElementById("techRating").value = "";
+	  document.getElementById("waterRating").value = "";
+	  document.getElementById("duration").value = "";
+	  document.getElementById("risk").value = "";
+	});
 	    
     </script>
 
