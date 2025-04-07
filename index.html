@@ -297,17 +297,31 @@
     });
 
     // close tab stuff 
-    document.getElementById("closeTabBtn").addEventListener("click", function () {
-        var tabcontent = document.getElementsByClassName("tabcontent");
-        for (var i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none"; // Hide all tabs
-        }
+//    document.getElementById("closeTabBtn").addEventListener("click", function () {
+//        var tabcontent = document.getElementsByClassName("tabcontent");
+//        for (var i = 0; i < tabcontent.length; i++) {
+//            tabcontent[i].style.display = "none"; // Hide all tabs
+//        }
 
-        var tablinks = document.getElementsByClassName("tablinks");
-        for (var i = 0; i < tablinks.length; i++) {
-            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-        }
-    });
+//        var tablinks = document.getElementsByClassName("tablinks");
+//        for (var i = 0; i < tablinks.length; i++) {
+//            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+//        }
+//    });
+
+	// close tab to work for all buttons
+	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
+		    btn.addEventListener("click", function () {
+			    var tabcontent = document.getElementsByClassName("tabcontent");\
+			    for (var i = 0; i < tabcontent.length; i++) {
+				 tabcontent[i].style.display = "none"; // Hide all tabs
+			    }
+			    var tablinks = document.getElementsByClassName("tablinks");
+			    for (var i = 0; i < tablinks.length; i++) {
+				    tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+			    }
+		    });
+	    });
 	    
     </script>
 
