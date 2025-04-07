@@ -192,7 +192,7 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/tasks/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
+    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
