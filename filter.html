@@ -331,30 +331,7 @@
       	    }); 	//hittest
       	  }); 		//mapview click
       	}); 		//mapview.when
-      }); 		//arcgis event listener
-    }); 		//require
-	    
-    // Open the Introduction tab by default when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
-    	document.getElementById("intro").style.display = "block"; // Show intro tab
-    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
-    });
-
-	// close tab to work for all buttons
-	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
-		    btn.addEventListener("click", function () {
-			    var tabcontent = document.getElementsByClassName("tabcontent");
-			    for (var i = 0; i < tabcontent.length; i++) {
-				 tabcontent[i].style.display = "none"; // Hide all tabs
-			    }
-			    var tablinks = document.getElementsByClassName("tablinks");
-			    for (var i = 0; i < tablinks.length; i++) {
-				    tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-			    }
-		    });
-	    });
-
-	//filter tool hopefully
+	      	//filter tool hopefully
 	document.getElementById("applyFilterBtn").addEventListener("click", () => {
 	  const tech = document.getElementById("techRating").value;
 	  const water = document.getElementById("waterRating").value;
@@ -391,6 +368,28 @@
 	  document.getElementById("duration").value = "";
 	  document.getElementById("risk").value = "";
 	});
+      }); 		//arcgis event listener
+    }); 		//require
+	    
+    // Open the Introduction tab by default when the page loads
+    document.addEventListener("DOMContentLoaded", function () {
+    	document.getElementById("intro").style.display = "block"; // Show intro tab
+    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
+    });
+
+	// close tab to work for all buttons
+	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
+		    btn.addEventListener("click", function () {
+			    var tabcontent = document.getElementsByClassName("tabcontent");
+			    for (var i = 0; i < tabcontent.length; i++) {
+				 tabcontent[i].style.display = "none"; // Hide all tabs
+			    }
+			    var tablinks = document.getElementsByClassName("tablinks");
+			    for (var i = 0; i < tablinks.length; i++) {
+				    tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+			    }
+		    });
+	    });
 	    
     </script>
 
