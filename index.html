@@ -119,7 +119,53 @@
 	</div>
 	    
 	<div id="filter" class="tabcontent">
-		<p>yo yo this is my filter tool</p>
+		<br>
+		<h2>Find a Canyon</h2>
+		      Remember that ratings are subject and canyon conditions can vary. ALWAYS do your research and prepare sufficiently before visiting a new canyon.
+		
+		      <p>Select attributes below to filter routes on the map.</p>
+		      
+		      <label for="techRating">Technical Rating:</label>
+		      <select id="techRating">
+		        <option value="">Any</option>
+		        <option value="2">2</option>
+		        <option value="3">3</option>
+		        <option value="4">4</option>
+		      </select>
+		      
+		      <br><label for="waterRating">Water Rating:</label>
+		      <select id="waterRating">
+		        <option value="">Any</option>
+		        <option value="A">A</option>
+		        <option value="B">B</option>
+		        <option value="C">C</option>
+		      </select>
+		      
+		      <br><label for="duration">Duration:</label>
+		      <select id="duration">
+		        <option value="">Any</option>
+		        <option value="I">I</option>
+		        <option value="II">II</option>
+		        <option value="III">III</option>
+		        <option value="IV">IV</option>
+		        <option value="V">V</option>
+		        <option value="VI">VI</option>
+		      </select>
+		      
+		      <br><label for="risk">Risk:</label>
+		      <select id="risk">
+		        <option value="">Any</option>
+		        <option value="PG">PG</option>
+		        <option value="R">R</option>
+		        <option value="X">X</option>
+		        <option value="XX">XX</option>
+		      </select>
+		      
+		      <br><br>
+		      <button id="applyFilterBtn" style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Apply Filter</button>
+		      <button id="clearFilterBtn" style="background-color: gray; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family); margin-left: 5px;">Clear</button>
+		      
+		      <br><br>
 		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
     </div>
@@ -147,7 +193,7 @@
     }
 	    
     // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils"], (FeatureLayer, Legend, reactiveUtils) => {
+    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
       
       const arcgisMap = document.querySelector("arcgis-map");
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
@@ -287,6 +333,75 @@
       	    }); 	//hittest
       	  }); 		//mapview click
       	}); 		//mapview.when
+
+	//filter tool
+	document.getElementById("applyFilterBtn").addEventListener("click", () => {
+	  const tech = document.getElementById("techRating").value;
+	  const water = document.getElementById("waterRating").value;
+	  const duration = document.getElementById("duration").value;
+	  const risk = document.getElementById("risk").value;
+	
+	  let whereClauses = [];
+	
+	  // Build the query for Rating (format: 3B IV R)
+	  if (tech) {
+	    whereClauses.push(`Rating LIKE '${tech}%'`); // Check the technical part (e.g., "3" in "3B IV R")
+	  }
+	  if (water) {
+	    whereClauses.push(`Rating LIKE '%${water}%'`); // Check the water part (e.g., "B" in "3B IV R")
+	  }
+	  if (duration) {
+	    whereClauses.push(`Rating LIKE '%${duration}%'`); // Check the duration part (e.g., "IV" in "3B IV R")
+	  }
+	  if (risk) {
+	    whereClauses.push(`Rating LIKE '%${risk}%'`); // Check the risk part (e.g., "R" in "3B IV R")
+	  }
+	
+	  // Combine the clauses into a single WHERE expression
+	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
+	
+	  canyonLayer1.definitionExpression = whereClause;
+	  canyonLayer0.definitionExpression = whereClause;
+
+	// Query canyon layers to get matching canyon names to apply the affect on my routeLayer
+	const query = new Query();
+	query.where = whereClause;
+	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
+	query.returnDistinctValues = true;
+	
+	// Execute the query on canyonLayer0 and canyonLayer1
+	Promise.all([
+	canyonLayer0.queryFeatures(query),
+	canyonLayer1.queryFeatures(query)
+	])
+	.then(results => {
+	// Collect all matching canyon names
+	let matchingCanyonNames = [];
+	results.forEach(result => {
+	  result.features.forEach(feature => {
+	    matchingCanyonNames.push(feature.attributes.Location);
+	  });
+	});
+	
+	// Filter routeLayer based on matching canyon names
+	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+	routeLayer.definitionExpression = routeWhereClause;
+	})
+	.catch(error => {
+	console.error("Error querying canyon layers: ", error);
+	});
+	}); //filter tool .getdocumentby
+	
+	// Clear filter
+	document.getElementById("clearFilterBtn").addEventListener("click", () => {
+	  canyonLayer1.definitionExpression = "1=1";
+	  canyonLayer0.definitionExpression = "1=1";
+	  routeLayer.definitionExpression = "1=1";
+	  document.getElementById("techRating").value = "";
+	  document.getElementById("waterRating").value = "";
+	  document.getElementById("duration").value = "";
+	  document.getElementById("risk").value = "";
+	}); //clear filter
       }); 		//arcgis event listener
     }); 		//require
 	    
@@ -295,19 +410,6 @@
     	document.getElementById("intro").style.display = "block"; // Show intro tab
     	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
     });
-
-    // close tab stuff 
-//    document.getElementById("closeTabBtn").addEventListener("click", function () {
-//        var tabcontent = document.getElementsByClassName("tabcontent");
-//        for (var i = 0; i < tabcontent.length; i++) {
-//            tabcontent[i].style.display = "none"; // Hide all tabs
-//        }
-
-//        var tablinks = document.getElementsByClassName("tablinks");
-//        for (var i = 0; i < tablinks.length; i++) {
-//            tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-//        }
-//    });
 
 	// close tab to work for all buttons
 	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
