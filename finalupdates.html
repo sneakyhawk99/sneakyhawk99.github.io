@@ -322,21 +322,41 @@
       	      breakpoint: false          // Always docked, even on large screens
       	};
 
-	// Link thing at top of popup
+	// Link to more info at top of popup
 	reactiveUtils.on(
 		() => mapView.popup,
 		"trigger-action",
 		(event) => {
+			const feature = mapView.popup.selectedFeature;
+
 			if (event.action.id === "info") {
-				const feature = mapView.popup.selectedFeature;
-				if (feature && feature.attributes) {
-		    			const linkUrl = feature.attributes.links_1;
-					if (linkUrl) {
-						window.open(linkUrl, "_blank"); // Open URL in new tab
-		    			}
+				const linkUrl = feature.attributes.links_1;
+				if (linkUrl) {
+					window.open(linkUrl, "_blank");
 				}
 			}
+
+			if (event.action.id === "custom-zoom") {
+				mapView.goTo({
+					target: feature.geometry,
+					zoom: 15
+				});
+			}
 	});
+			
+			
+			
+			
+//			if (event.action.id === "info") {
+//				const feature = mapView.popup.selectedFeature;
+//				if (feature && feature.attributes) {
+//		    			const linkUrl = feature.attributes.links_1;
+//					if (linkUrl) {
+//						window.open(linkUrl, "_blank"); // Open URL in new tab
+//		    			}
+//				}
+//			}
+//	});
 		
         // Add a legend for routeLayer
         const legend = new Legend({
