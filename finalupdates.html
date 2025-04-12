@@ -200,6 +200,19 @@
       arcgisMap.addEventListener("arcgisViewReadyChange", () => {
         mapView = arcgisMap.view;
 
+	// map bounding box
+	mapView.constraints = {
+		minZoom: 6,
+		geometry: {
+			type: "extent",
+			xmin: -114.1,
+			ymin: 36.5,
+			xmax: -109.0,
+			ymax: 42.0,
+			spatialReference: {wkid: 4326}
+      		}
+	};
+	
         // Define a pop-up for canyonLayer0
         const popupCanyons0 = {
           title: "{Location}",
