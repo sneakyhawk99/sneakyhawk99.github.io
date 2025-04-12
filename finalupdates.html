@@ -53,7 +53,7 @@
 	<div class="tab">
 		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
 		<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
-		<button class="tablinks" onclick="openTab(event, 'filter')">Filter Tool</button>
+		<button class="tablinks" onclick="openTab(event, 'search')">Search Tool</button>
 	</div>
 			
 	<!-- Tab Content -->    
@@ -70,7 +70,7 @@
 			Utah’s canyons promise an unforgettable challenge in a world-class outdoor setting.</p>
 		<p>This map uses community-contributed data from RopeWiki to visually explore potential canyoneering routes. Each pin provides key details about a canyon, including its 
 			difficulty rating, number of rappels, and estimated duration. The routes are displayed to give an overview of their length and topography.</p>
-		<p><strong>Select a canyon to learn more, or use the Filter Tool tab to refine results based on specific attributes. For more in-depth information, follow the provided links
+		<p><strong>Select a canyon to learn more, or use the Search Tool tab to look for canyons based on specific attributes. For more in-depth information, follow the provided links
 			to RopeWiki pages for each canyon.</strong></p>
 		<h2>Happy canyoneering!</h2>
 		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
@@ -113,17 +113,18 @@
 			<li>G - No significant risk</li>
 			<li>PG - Normal risk factors present</li>
 			<li>R - Risky. Solid technical skills, not for beginners, complicated descents.</li>
-			<li>X or XX - Extreme: Possible serious injury or death if care is not heeded. Multiple risks exist that will complicate the descent. Expert canyoneers only! Possible long and difficult rappels, multi pitch rappels, exposed climbing, up to 5th class technical climbing without rope use, prolonged exposure to cold water.</li>
+			<li>X or XX - Extreme: Possible serious injury or death if care is not heeded. Multiple risks exist that will complicate the descent. Expert canyoneers only! Possible long and difficult rappels, 
+				multi-pitch rappels, exposed climbing, up to 5th class technical climbing without rope use, prolonged exposure to cold water.</li>
 			</ul>
 		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
 	    
-	<div id="filter" class="tabcontent">
+	<div id="search" class="tabcontent">
 		<h2>Find a Canyon</h2>
-		      Remember that ratings are subject and canyon conditions can vary. ALWAYS do your research and prepare sufficiently before visiting a new canyon.
+		      <p>Select attributes below to explore canyon routes that fit those specifications.</p>
+		      <p>Remember that ratings are subjective and canyon conditions can vary. <strong>ALWAYS do your research</strong> and prepare sufficiently before visiting a new canyon. 
+			      Follow the "More Information" link in a canyon's popup to learn more about the conditions and beta of a specific route.</p>
 		
-		      <p>Select attributes below to filter routes on the map.</p>
-		      
 		      <label for="techRating">Technical Rating:</label>
 		      <select id="techRating">
 		        <option value="">Any</option>
@@ -385,7 +386,8 @@
       	    }); 	//hittest
       	  }); 		//mapview click
       	}); 		//mapview.when
-	      	//filter tool hopefully
+	
+	//search tool
 	document.getElementById("applyFilterBtn").addEventListener("click", () => {
 	  const tech = document.getElementById("techRating").value;
 	  const water = document.getElementById("waterRating").value;
@@ -441,7 +443,7 @@
 	.catch(error => {
 	console.error("Error querying canyon layers: ", error);
 	});
-	}); //filter tool .getdocumentby
+	}); //search tool .getdocumentby
 	
 	// Clear filter
 	document.getElementById("clearFilterBtn").addEventListener("click", () => {
