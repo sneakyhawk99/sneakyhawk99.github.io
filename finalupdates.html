@@ -428,20 +428,27 @@
 
 	  // Build query for name search
 	  // Build the query for Rating (format: 3B IV R)
+	  // Name text search
 	  if (searchText) {
 	  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
 	  }
+	  // Check the technical part (e.g., "3" in "3B IV R")
 	  if (tech) {
-	    whereClauses.push(`Rating LIKE '${tech}%'`); // Check the technical part (e.g., "3" in "3B IV R")
+	    whereClauses.push(`Rating LIKE '${tech}%'`); 
 	  }
+	  // Check the water part (e.g., "B" in "3B IV R")
 	  if (water) {
-	    whereClauses.push(`Rating LIKE '%${water}%'`); // Check the water part (e.g., "B" in "3B IV R")
+	    whereClauses.push(`Rating LIKE '%${water}%'`); 
 	  }
+	  // Check the duration part (e.g., "IV" in "3B IV R")
 	  if (duration) {
-	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); // Check the duration part (e.g., "IV" in "3B IV R")
+	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
 	  }
-	  if (risk) {
-	    whereClauses.push(`Rating LIKE '%${risk}%'`); // Check the risk part (e.g., "R" in "3B IV R")
+	  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
+	  if (risk === "PG") {
+	    whereClauses.push(`(Rating LIKE '%PG%' OR Rating NOT LIKE '% R' AND Rating NOT LIKE '% X' AND Rating NOT LIKE '% PG')`);
+	  } else if (risk) {
+	    whereClauses.push(`Rating LIKE '%${risk}%'`); 
 	  }
 	
 	  // Combine the clauses into a single WHERE expression
