@@ -26,3 +26,7 @@
   background-color: #ccc;
 }
 
+/* calcite label for the search tool */
+calcite-label {
+  font-weight: bold
+}
