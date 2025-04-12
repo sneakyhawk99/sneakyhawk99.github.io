@@ -426,8 +426,8 @@
 
 	  // Build query for name search
 	  // Build the query for Rating (format: 3B IV R)
-	  if(searchText) {
-		  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
+	  if (searchText) {
+	  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
 	  }
 	  if (tech) {
 	    whereClauses.push(`Rating LIKE '${tech}%'`); // Check the technical part (e.g., "3" in "3B IV R")
