@@ -207,7 +207,7 @@
 		{
 		title: "More Information", 
 		id: "info", 
-		className: "esri-icon-link"	
+		className: "esri-icon-globe"	
 	  }],
 	  // I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
 	  // for most of them I'm just pulling the value of the field. I have a query for duration, distance, number of rappels, and longest rappel
@@ -249,10 +249,16 @@
 	  //define more information action
 	  actions: [
 		{
+		title: "Zoom to Canyon",
+		id: "custom-zoom",
+		className: "esri-icon-zoom-in-magnifying-glass"
+		}
+		{
 		title: "More Information", 
 		id: "info", 
-		className: "esri-icon-link"	
-	  }],
+		className: "esri-icon-globe"	
+	  	},
+	  ],
 		
 	  content: (feature) => {
 		const attrs = feature.graphic.attributes;
