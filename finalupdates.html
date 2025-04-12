@@ -126,8 +126,11 @@
 		      <p>Remember that ratings are subjective and canyon conditions can vary. <strong>ALWAYS do your research</strong> and prepare sufficiently before visiting a new canyon. 
 			      Follow the "More Information" link in each canyon's popup to learn more about the conditions and beta of a specific route.</p>
 
+			<label for="searchLocation">Search by Canyon Name:</label>
+			<input type="text" id="searchLocation" placeholder="Type canyon name...">
+
 			<calcite-label style="font-weight: bold;">
-				Technical Rating
+			  Technical Rating
 			</calcite-label>
 			<calcite-label>
 			  Skill
@@ -413,14 +416,19 @@
 	
 	//search tool
 	document.getElementById("applyFilterBtn").addEventListener("click", () => {
+	  const searchText = document.getElementById("searchLocation").value.trim();
 	  const tech = document.getElementById("techRating").value;
 	  const water = document.getElementById("waterRating").value;
 	  const duration = document.getElementById("duration").value;
 	  const risk = document.getElementById("risk").value;
 	
 	  let whereClauses = [];
-	
+
+	  // Build query for name search
 	  // Build the query for Rating (format: 3B IV R)
+	  if(searchText) {
+		  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
+	  }
 	  if (tech) {
 	    whereClauses.push(`Rating LIKE '${tech}%'`); // Check the technical part (e.g., "3" in "3B IV R")
 	  }
@@ -474,6 +482,7 @@
 	  canyonLayer1.definitionExpression = "1=1";
 	  canyonLayer0.definitionExpression = "1=1";
 	  routeLayer.definitionExpression = "1=1";
+	  document.getElementByID("searchLocation").value = "";
 	  document.getElementById("techRating").value = "";
 	  document.getElementById("waterRating").value = "";
 	  document.getElementById("duration").value = "";
