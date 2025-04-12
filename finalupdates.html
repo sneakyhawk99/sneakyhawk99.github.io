@@ -250,7 +250,7 @@
 	      
         arcgisMap.addLayer(routeLayer);
 	      
-        // define and add Canyon pin feature layer and its popup (points)
+        // define and add Canyon pin feature layer (zoomed in) and its popup (points)
         const canyonLayer0 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
           popupTemplate: popupCanyons,
@@ -259,7 +259,7 @@
 
         arcgisMap.addLayer(canyonLayer0);
 
-        // define and add Canyon dot feature layer (points)
+        // define and add Canyon dot feature layer (zoomed out) and its popup (points)
         const canyonLayer1 = new FeatureLayer({
           url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2",
 	  popupTemplate: popupCanyons,
@@ -306,12 +306,13 @@
 
         // Add the legend to the bottom-right
         mapView.ui.add(legend, "bottom-right");
-          
+
+	// Make route layer prominent when a canyon point or pin is selected
         mapView.on("click", (event) => {
           mapView.hitTest(event).then((response) => {
             if (response.results.length > 0) {
               const clickedFeature = response.results[0].graphic;
-              if (clickedFeature.layer === canyonLayer0) {
+              if (clickedFeature.layer === canyonLayer0 || clickedFeature.layer ===  canyonLayer1) {
                       const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
             
                       // Apply feature effect on the route layer
