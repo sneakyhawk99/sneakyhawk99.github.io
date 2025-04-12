@@ -261,7 +261,9 @@
 
         // define and add Canyon dot feature layer (points)
         const canyonLayer1 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2"
+          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2",
+	  popupTemplate: popupCanyons,
+	  outFields: ["*"]
         });
 
       	arcgisMap.addLayer(canyonLayer1);
