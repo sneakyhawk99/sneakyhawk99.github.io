@@ -466,7 +466,7 @@
 
 	canyonLayer0.queryFeatureCount(countQuery).then((count) => {
 		const resultLabel = document.getElementById("filter-result-label");
-		resultLabel.textContent = `${count} canyon$(count === 1 ? "" : "s"} found`;
+		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} found`;
 	});
 
 	// Query canyon layers to get matching canyon names to apply the filter affect on my routeLayer
@@ -508,10 +508,9 @@
 	  document.getElementById("waterRating").value = "";
 	  document.getElementById("duration").value = "";
 	  document.getElementById("risk").value = "";
-	  document.getElementById("filter-result-label").textContent = "";
 	}); //clear filter
       }); 		//arcgis event listener
-    }); 		//require
+    }); 		//require end
 	    
     // Open the Introduction tab by default when the page loads
     document.addEventListener("DOMContentLoaded", function () {
