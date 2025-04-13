@@ -508,10 +508,6 @@
 	  document.getElementById("waterRating").value = "";
 	  document.getElementById("duration").value = "";
 	  document.getElementById("risk").value = "";
-	  canyonLayer0.queryFeatureCount(countQuery).then((count) => {
-		const resultLabel = document.getElementById("filter-result-label");
-		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} found`;
-	});
 	}); //clear filter
       }); 		//arcgis event listener
     }); 		//require end
