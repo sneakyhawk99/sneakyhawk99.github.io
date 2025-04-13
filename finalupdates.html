@@ -189,6 +189,113 @@
     </div>
     
     <script>
+
+    // function to handle the filter update when an input in the search tool changes
+	//search tool
+	function updateCanyonFilter () {
+	  const searchText = document.getElementById("searchLocation").value.trim();
+	  const tech = document.getElementById("techRating").value;
+	  const water = document.getElementById("waterRating").value;
+	  const duration = document.getElementById("duration").value;
+	  const risk = document.getElementById("risk").value;
+	
+	  let whereClauses = [];
+
+	  // Build query for name search
+	  // Build the query for Rating (format: 3B IV R)
+	  // Name text search
+	  if (searchText) {
+	  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
+	  }
+	  // Check the technical part (e.g., "3" in "3B IV R")
+	  if (tech) {
+	    whereClauses.push(`Rating LIKE '${tech}%'`); 
+	  }
+	  // Check the water part (e.g., "B" in "3B IV R")
+	  if (water) {
+	    whereClauses.push(`Rating LIKE '%${water}%'`); 
+	  }
+	  // Check the duration part (e.g., "IV" in "3B IV R")
+	  if (duration) {
+	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
+	  }
+	  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
+	  if (risk === "PG") {
+	    whereClauses.push(`(Rating LIKE '%PG%' OR Rating NOT LIKE '% R' AND Rating NOT LIKE '% X' AND Rating NOT LIKE '% PG')`);
+	  } else if (risk) {
+	    whereClauses.push(`Rating LIKE '%${risk}%'`); 
+	  }
+	
+	  // Combine the clauses into a single WHERE expression
+	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
+	
+	  canyonLayer1.definitionExpression = whereClause;
+	  canyonLayer0.definitionExpression = whereClause;
+
+	// update canyon count display
+	const countQuery = canyonLayer0.createQuery();
+	countQuery.where = whereClause;
+	countQuery.returnGeometry = false;
+
+	canyonLayer0.queryFeatureCount(countQuery).then((count) => {
+		const resultLabel = document.getElementById("filter-result-label");
+		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} found`;
+	});
+
+	// Query canyon layers to get matching canyon names to apply the filter affect on my routeLayer
+	const query = new Query();
+	query.where = whereClause;
+	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
+	query.returnDistinctValues = true;
+	
+	// Execute the query on canyonLayer0 and canyonLayer1
+	Promise.all([
+	canyonLayer0.queryFeatures(query),
+	canyonLayer1.queryFeatures(query)
+	])
+	.then(results => {
+	// Collect all matching canyon names
+	let matchingCanyonNames = [];
+	results.forEach(result => {
+	  result.features.forEach(feature => {
+	    matchingCanyonNames.push(feature.attributes.Location);
+	  });
+	});
+
+	// Filter routeLayer based on matching canyon names
+	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+	routeLayer.definitionExpression = routeWhereClause;
+	})
+	.catch(error => {
+	  console.error("Error querying canyon layers: ", error);
+	});
+	} //search tool
+
+    // Add event listeners to inputs to trigger the filter update on change
+    document.getElementById("searchLocation").addEventListener("input", updateCanyonFilter);
+    document.getElementById("techRating").addEventListener("change", updateCanyonFilter);
+    document.getElementById("waterRating").addEventListener("change", updateCanyonFilter);
+    document.getElementById("duration").addEventListener("change", updateCanyonFilter);
+    document.getElementById("risk").addEventListener("change", updateCanyonFilter);
+
+    // Clear filter logic
+    document.getElementById("clearFilterBtn").addEventListener("click", () => {
+        canyonLayer1.definitionExpression = "1=1";
+        canyonLayer0.definitionExpression = "1=1";
+        routeLayer.definitionExpression = "1=1";
+        document.getElementById("searchLocation").value = "";
+        document.getElementById("techRating").value = "";
+        document.getElementById("waterRating").value = "";
+        document.getElementById("duration").value = "";
+        document.getElementById("risk").value = "";
+        updateCanyonFilter(); // Reapply filters after clearing
+    });
+	    
+	    
+	    
+	    
+	    
+	    
     //function to open the tab content
     function openTab(evt, tabName) {
 	var i, tabcontent, tablinks;
@@ -417,98 +524,9 @@
       	    }); 	//hittest
       	  }); 		//mapview click
       	}); 		//mapview.when
-	
-	//search tool
-	document.getElementById("applyFilterBtn").addEventListener("click", () => {
-	  const searchText = document.getElementById("searchLocation").value.trim();
-	  const tech = document.getElementById("techRating").value;
-	  const water = document.getElementById("waterRating").value;
-	  const duration = document.getElementById("duration").value;
-	  const risk = document.getElementById("risk").value;
-	
-	  let whereClauses = [];
 
-	  // Build query for name search
-	  // Build the query for Rating (format: 3B IV R)
-	  // Name text search
-	  if (searchText) {
-	  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
-	  }
-	  // Check the technical part (e.g., "3" in "3B IV R")
-	  if (tech) {
-	    whereClauses.push(`Rating LIKE '${tech}%'`); 
-	  }
-	  // Check the water part (e.g., "B" in "3B IV R")
-	  if (water) {
-	    whereClauses.push(`Rating LIKE '%${water}%'`); 
-	  }
-	  // Check the duration part (e.g., "IV" in "3B IV R")
-	  if (duration) {
-	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
-	  }
-	  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
-	  if (risk === "PG") {
-	    whereClauses.push(`(Rating LIKE '%PG%' OR Rating NOT LIKE '% R' AND Rating NOT LIKE '% X' AND Rating NOT LIKE '% PG')`);
-	  } else if (risk) {
-	    whereClauses.push(`Rating LIKE '%${risk}%'`); 
-	  }
-	
-	  // Combine the clauses into a single WHERE expression
-	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
-	
-	  canyonLayer1.definitionExpression = whereClause;
-	  canyonLayer0.definitionExpression = whereClause;
-
-	// update canyon count display
-	const countQuery = canyonLayer0.createQuery();
-	countQuery.where = whereClause;
-	countQuery.returnGeometry = false;
-
-	canyonLayer0.queryFeatureCount(countQuery).then((count) => {
-		const resultLabel = document.getElementById("filter-result-label");
-		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} found`;
-	});
-
-	// Query canyon layers to get matching canyon names to apply the filter affect on my routeLayer
-	const query = new Query();
-	query.where = whereClause;
-	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
-	query.returnDistinctValues = true;
-	
-	// Execute the query on canyonLayer0 and canyonLayer1
-	Promise.all([
-	canyonLayer0.queryFeatures(query),
-	canyonLayer1.queryFeatures(query)
-	])
-	.then(results => {
-	// Collect all matching canyon names
-	let matchingCanyonNames = [];
-	results.forEach(result => {
-	  result.features.forEach(feature => {
-	    matchingCanyonNames.push(feature.attributes.Location);
-	  });
-	});
-	
-	// Filter routeLayer based on matching canyon names
-	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
-	routeLayer.definitionExpression = routeWhereClause;
-	})
-	.catch(error => {
-	console.error("Error querying canyon layers: ", error);
-	});
-	}); //search tool .getdocumentby
-	
-	// Clear filter
-	document.getElementById("clearFilterBtn").addEventListener("click", () => {
-	  canyonLayer1.definitionExpression = "1=1";
-	  canyonLayer0.definitionExpression = "1=1";
-	  routeLayer.definitionExpression = "1=1";
-	  document.getElementByID("searchLocation").value = "";
-	  document.getElementById("techRating").value = "";
-	  document.getElementById("waterRating").value = "";
-	  document.getElementById("duration").value = "";
-	  document.getElementById("risk").value = "";
-	}); //clear filter
+	// Apply the filter when the map is ready      
+	updateCanyonFilter();
       }); 		//arcgis event listener
     }); 		//require end
 	    
