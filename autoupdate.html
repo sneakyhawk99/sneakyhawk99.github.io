@@ -449,11 +449,13 @@
 	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
 	  }
 	  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
-	  if (risk === "PG") {
-	    whereClauses.push(`(Rating LIKE '%PG%' OR Rating NOT LIKE '% R' AND Rating NOT LIKE '% X' AND Rating NOT LIKE '% PG')`);
-	  } else if (risk) {
-	    whereClauses.push(`Rating LIKE '%${risk}%'`); 
-	  }
+	  if (risk === "PG") {
+	    whereClauses.push(`(Rating LIKE '%PG%' OR (Rating NOT LIKE '%R%' AND Rating NOT LIKE '%X%'))`);
+	  } else if (risk === "R") {
+	    whereClauses.push(`Rating LIKE '%R%'`);
+	  } else if (risk === "X") {
+	    whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
+	  }
 	
 	  // Combine the clauses into a single WHERE expression
 	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
