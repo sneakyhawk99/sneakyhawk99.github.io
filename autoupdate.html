@@ -471,7 +471,7 @@
 		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} found`;
 	});
 
-	// Query canyon layers to get matching canyon names to apply the filter affect on my routeLayer
+	// Query canyon layers to get matching canyon names to apply the filter effect on my routeLayer
 	const query = new Query();
 	query.where = whereClause;
 	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
@@ -502,10 +502,10 @@
 
     // Add event listeners to inputs to trigger the filter update on change
     document.getElementById("searchLocation").addEventListener("input", updateCanyonFilter);
-    document.getElementById("techRating").addEventListener("change", updateCanyonFilter);
-    document.getElementById("waterRating").addEventListener("change", updateCanyonFilter);
-    document.getElementById("duration").addEventListener("change", updateCanyonFilter);
-    document.getElementById("risk").addEventListener("change", updateCanyonFilter);
+    document.getElementById("techRating").addEventListener("input", updateCanyonFilter);
+    document.getElementById("waterRating").addEventListener("input", updateCanyonFilter);
+    document.getElementById("duration").addEventListener("input", updateCanyonFilter);
+    document.getElementById("risk").addEventListener("input", updateCanyonFilter);
 
     // Clear filter logic
     document.getElementById("clearFilterBtn").addEventListener("click", () => {
