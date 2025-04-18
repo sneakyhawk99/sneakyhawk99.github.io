@@ -514,11 +514,11 @@
    }
 	      
     // Add event listeners to inputs to trigger the filter update on change
-    document.getElementById("searchLocation").addEventListener("input", updateCanyonFilter);
-    document.getElementById("techRating").addEventListener("input", updateCanyonFilter);
-    document.getElementById("waterRating").addEventListener("input", updateCanyonFilter);
-    document.getElementById("duration").addEventListener("input", updateCanyonFilter);
-    document.getElementById("risk").addEventListener("input", updateCanyonFilter);
+    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange);
+    document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
+    document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
+    document.getElementById("duration").addEventListener("input", handleFilterInputChange);
+    document.getElementById("risk").addEventListener("input", handleFilterInputChange);
 
     // Clear filter logic
     document.getElementById("clearFilterBtn").addEventListener("click", () => {
