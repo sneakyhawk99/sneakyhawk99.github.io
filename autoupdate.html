@@ -302,7 +302,7 @@
 	        };
 	        
 	        const duration = (attrs.MinTimeHrs ===0 && attrs.MaxTimeHrs > 0)
-			? `${attrs.MaxTimeHrs hrs`
+			? `${attrs.MaxTimeHrs hrs}`
 			: (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0))
 				? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
 				: "No data";
