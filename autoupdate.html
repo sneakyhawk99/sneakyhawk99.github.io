@@ -491,15 +491,18 @@
       	  }); 		//mapview click
       	}); 		//mapview.when
 
-    // function to handle the filter update when an input in the search tool changes
-	//search tool
+    // function to handle the filter update when an input in the search tool changes.
+	//search tool function that will be run when the event listener triggers
 	function updateCanyonFilter () {
+	  //this gets the input from the inputs on the webpage
 	  const searchText = document.getElementById("searchLocation").value.trim();
 	  const tech = document.getElementById("techRating").value;
 	  const water = document.getElementById("waterRating").value;
 	  const duration = document.getElementById("duration").value;
 	  const risk = document.getElementById("risk").value;
-	
+	  const quality = parseFloat(document.getElementById("qualityRating").value);
+
+	  //start with an empty query
 	  let whereClauses = [];
 
 	  // Build query for name search
@@ -528,6 +531,10 @@
 	  } else if (risk === "X") {
 	    whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
 	  }
+	  // check the quality rating part
+	  if (quality) {
+	    whereClauses.push(`Quality >= ${quality}`)
+	  }
 	
 	  // Combine the clauses into a single WHERE expression
 	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
@@ -551,7 +558,7 @@
 	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
 	query.returnDistinctValues = true;
 	
-	// Execute the query on canyonLayer0 and canyonLayer1
+	// Execute the query on canyonLayer0
 	Promise.all([
 	canyonLayer0.queryFeatures(query),
 	])
@@ -590,6 +597,7 @@
     document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("duration").addEventListener("input", handleFilterInputChange);
     document.getElementById("risk").addEventListener("input", handleFilterInputChange);
+    document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
 
     // Clear filter logic
     document.getElementById("clearFilterBtn").addEventListener("click", () => {
