@@ -196,11 +196,13 @@
 			  </calcite-select>
 			</calcite-label>
 
-			<calcite-label style="font-weight: bold">
-			  Quality Rating
-			</calcite-label>
-			  <span class="info-icon" data-tooltip="Anything below the chosen value will be hidden The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5)">i</span>
-		
+			<calcite-label layout="inline">
+			  <div style="display: flex; align-items: canter;">
+			    <span style="font-weight: bold; margin-right: 0.5em;">Quality Rating</span>
+			    <span class="info-icon" data-tooltip="Anything below the chosen value will be hidden The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5)">i</span>
+			  </div>
+			
+			  		
 			  <calcite-select id="qualityRating">
 			    <calcite-option value="">Any</calcite-option>
 			    <calcite-option value="0">0</calcite-option>
