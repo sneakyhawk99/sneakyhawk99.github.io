@@ -126,7 +126,9 @@
 		      <h3>Select attributes below to explore canyon routes that fit those specifications.</h3>
 		      <p>Remember that ratings are subjective and canyon conditions can vary. <strong>ALWAYS do your research</strong> and prepare sufficiently before visiting a new canyon. 
 			      Follow the "More Information" link in each canyon's popup to learn more about the conditions and beta of a specific route.</p>
-
+			<br> <!-- number of canyons visible-->
+			<div id="filter-result-label" style="margin-bottom: 10px; font-weight: bold; color: red;"></div>
+			<br>
 			<calcite-label style= "font-weight: bold">
 			  Filter by Canyon Name:
 			  <calcite-input id="searchLocation" placeholder="Enter canyon name" icon="magnifying-glass" clearable></calcite-input>
@@ -183,9 +185,8 @@
 			</calcite-label>
 		      
 		      <br>
-		      <div id="filter-result-label" style="margin-bottom: 10px; font-weight: bold;"></div>
-		      <br>
-<!--		      <button id="applyFilterBtn" style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Apply Filter</button> -->
+				
+<!--manual filter button      <button id="applyFilterBtn" style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Apply Filter</button> -->
 		      <button id="clearFilterBtn" style="background-color: gray; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family); margin-left: 5px;">Clear</button>
 		      
 		      <br><br><br>
