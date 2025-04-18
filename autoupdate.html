@@ -514,7 +514,8 @@
    }
 	      
     // Add event listeners to inputs to trigger the filter update on change
-    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange);
+    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange); //to update with every letter typed
+    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange); //to update the map when pressing the x to get rid of text
     document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("duration").addEventListener("input", handleFilterInputChange);
