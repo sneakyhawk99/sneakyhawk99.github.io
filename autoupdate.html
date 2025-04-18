@@ -212,6 +212,14 @@
 			  </calcite-tooltip>
 			</div>
 			
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+			  <span style="font-weight: bold;">Quality Rating</span>
+			  <calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+			  <calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
+			    Anything below the chosen value will be hidden. The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5).
+			  </calcite-tooltip>
+			</div>
+			
 			<calcite-label>
 			  <calcite-slider
 			    id="qualityRating"
@@ -221,6 +229,8 @@
 			    value="0"
 			    label-inputs
 			    ticks
+			    label-handles
+			    label-ticks
 			  ></calcite-slider>
 			</calcite-label>
 		
