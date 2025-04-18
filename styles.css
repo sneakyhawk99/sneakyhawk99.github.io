@@ -32,7 +32,7 @@
   height: 16px;
   border-radius: 50%;
   background-color: #ccc; /* Example background color */
-  color: #fff; /* Example text color */
+  color: #fff; 
   font-size: 12px;
   line-height: 16px;
   text-align: center;
@@ -55,7 +55,7 @@
   transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
   top: 50px; /* Adjust position as needed */
   left: calc(100% + 10px);
-  transform: translateY(-50%);
+  transform: translateY(50%);
   z-index: 1;
 }
 
