@@ -54,8 +54,8 @@
   visibility: hidden;
   transition: opacity 0.3s ease-in-out, visibility 0s linear 0.3s;
   top: -30px; /* Adjust position as needed */
-  left: 50%;
-  transform: translateX(-50%);
+  left: -10%;
+  transform: translateY(-50%) translateX(-100%);
   z-index: 1;
 }
 
