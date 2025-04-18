@@ -154,9 +154,11 @@
 			
 			<calcite-label>
 			  <div style="display: flex; align-items: center;">
-			  Water
-			  <span class="info-icon" data-tooltip="A - Dry to little water, B - Still water swimming expected,
-				  C - Water with strong current">i</span>
+			  	  Water
+				  <calcite-icon id="water-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				  <calcite-tooltip reference-element="water-tooltip-icon" placement="top">
+				    A - Dry to little water, B - Still water swimming expected, C - Water with a strong current
+				  </calcite-tooltip>	
 			  </div>
 			  <calcite-select id="waterRating">
 			    <calcite-option value="">Any</calcite-option>
@@ -192,6 +194,7 @@
 				  <calcite-tooltip reference-element="risk-tooltip-icon" placement="top">
 				    PG - Normal risk factors present (often ommitted), R - Risky, X & XX - Extremely risky
 				  </calcite-tooltip>
+			  </div>
 			  <calcite-select id="risk">
 			    <calcite-option value="">Any</calcite-option>
 			    <calcite-option value="PG">PG</calcite-option>
