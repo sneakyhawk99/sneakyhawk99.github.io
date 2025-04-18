@@ -196,9 +196,12 @@
 			  </calcite-select>
 			</calcite-label>
 
-			<div>
-			<calcite-label style="font-weight: bold; display: flex; align-items: center;">
-			Quality Rating (>=)
+			<calcite-label style="font-weight: bold">
+			  Quality Rating
+			</calcite-label>
+			<calcite-label style="display: flex; align-items: center;">
+			  <div style="display: flex; align-items: center;">
+			  Anything below the chosen value will be hidden
 			  <span class="info-icon" data-tooltip="Overall quality rating of the canyon (0-5, increments of 0.5)">i</span>
 			  </div>
 			  <calcite-select id="qualityRating">
