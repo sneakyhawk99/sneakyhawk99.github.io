@@ -504,7 +504,7 @@
 	});
 	} //search tool
 
-    // delay to try to fix filter issue
+    // delay to try to fix filter issue (I may be able to fix it but changing input in the following section to calciteInputChange, but this delay works so I have other stuff to worry about
     let filterTimeout;
     const filterDelay = 100; //Adjust the delay in milliseconds
 
@@ -514,7 +514,7 @@
    }
 	      
     // Add event listeners to inputs to trigger the filter update on change
-    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange);
+    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange);
     document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("duration").addEventListener("input", handleFilterInputChange);
