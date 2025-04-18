@@ -201,9 +201,19 @@
 			    <span style="font-weight: bold; margin-right: 0.5em;">Quality Rating</span>
 			    <span class="info-icon" data-tooltip="Anything below the chosen value will be hidden The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5)">i</span>
 			  </div>
-			
+
+			  <calcite-slider
+				  id="qualityRating"
+				  min="0"
+				  max="5"
+				  step="0.5"
+				  value="0"
+				  label-inputs
+				  labels='["0", "1", "2", "3", "4", "5"]'
+				  ></calcite-slider>
+			</calcite-label>
 			  		
-			  <calcite-select id="qualityRating">
+<!--			  <calcite-select id="qualityRating">
 			    <calcite-option value="">Any</calcite-option>
 			    <calcite-option value="0">0</calcite-option>
 			    <calcite-option value="0.5">0.5</calcite-option>
@@ -218,7 +228,7 @@
 			    <calcite-option value="5">5</calcite-option>
 			  </calcite-select>
 			</calcite-label>
-		
+-->		
 		      <br>
 				
 <!--manual filter button      <button id="applyFilterBtn" style="background-color: green; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Apply Filter</button> -->
