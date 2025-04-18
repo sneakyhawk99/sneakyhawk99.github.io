@@ -196,7 +196,28 @@
 			  </calcite-select>
 			</calcite-label>
 
-			<calcite-label layout="inline">
+
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+			  <span style="font-weight: bold;">Quality Rating</span>
+			  <calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+			  <calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
+			    Anything below the chosen value will be hidden. The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5).
+			  </calcite-tooltip>
+			</div>
+			
+			<calcite-label>
+			  <calcite-slider
+			    id="qualityRating"
+			    min="0"
+			    max="5"
+			    step="0.5"
+			    value="0"
+			    label-inputs
+			    ticks
+			  ></calcite-slider>
+			</calcite-label>
+		
+<!--			<calcite-label layout="inline">
 			  <div style="display: flex; align-items: canter;">
 			    <span style="font-weight: bold;">Quality Rating</span>
 			    <span class="info-icon" data-tooltip="Anything below the chosen value will be hidden The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5)">i</span>
@@ -212,7 +233,7 @@
 				  labels='["0", "1", "2", "3", "4", "5"]'
 				  ></calcite-slider>
 			</calcite-label>
-			  		
+-->			  		
 <!--			  <calcite-select id="qualityRating">
 			    <calcite-option value="">Any</calcite-option>
 			    <calcite-option value="0">0</calcite-option>
