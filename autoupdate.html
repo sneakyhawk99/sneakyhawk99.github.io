@@ -142,8 +142,11 @@
 		
 			<calcite-label>
 			  <div style="display: flex; align-items: center;">
-			  Skill
-			  <span class="info-icon" data-tooltip="3 - Technical Rappelling, 4 - Advanced Technical Rappelling">i</span>
+			  	Skill
+				  <calcite-icon id="skill-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				  <calcite-tooltip reference-element="skill-tooltip-icon" placement="top">
+				    3 - Technical Rappelling, 4 - Advanced Technical Rappelling
+				  </calcite-tooltip>					  
 			  </div>
 			  <calcite-select id="techRating">
 			    <calcite-option value="">Any</calcite-option>
@@ -207,7 +210,7 @@
 			  <span style="font-weight: bold;">Quality Rating</span>
 			  <calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
 			  <calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
-			    Anything below the chosen value will be hidden. The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5).
+			    Average quality rating from 0 to 5 based on reviews by RopeWiki users. Use his value to set a minimum rating. Ex: set to 3 to see all of the canyons rated 3 or higher
 			  </calcite-tooltip>
 			</div>
 			
