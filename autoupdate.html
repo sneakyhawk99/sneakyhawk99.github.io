@@ -427,8 +427,6 @@
 	  const water = document.getElementById("waterRating").value;
 	  const duration = document.getElementById("duration").value;
 	  const risk = document.getElementById("risk").value;
-	  console.log("Selected Risk:", risk); // for debugging
-	  console.log("Selected Water:", water);
 	
 	  let whereClauses = [];
 
@@ -497,6 +495,7 @@
 
 	// Filter routeLayer based on matching canyon names
 	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+	console.log("routeWhereClause:", routeWhereClause);
 	routeLayer.definitionExpression = routeWhereClause;
 	})
 	.catch(error => {
