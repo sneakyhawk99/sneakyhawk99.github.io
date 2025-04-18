@@ -202,15 +202,6 @@
 			    <calcite-option value="X">X</calcite-option>
 			  </calcite-select>
 			</calcite-label>
-
-
-			<div style="display: flex; align-items: center; justify-content: space-between;">
-			  <span style="font-weight: bold;">Quality Rating</span>
-			  <calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-			  <calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
-			    Anything below the chosen value will be hidden. The chosen value is the minimum quality rating that will be displayed (0-5, increments of 0.5).
-			  </calcite-tooltip>
-			</div>
 			
 			<div style="display: flex; align-items: center; justify-content: space-between;">
 			  <span style="font-weight: bold;">Quality Rating</span>
@@ -614,7 +605,7 @@
     document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
     document.getElementById("duration").addEventListener("input", handleFilterInputChange);
     document.getElementById("risk").addEventListener("input", handleFilterInputChange);
-    document.getElementById("qualityRating").addEventListener("input", handleFilterInputChange);
+    document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
 
     // Clear filter logic
     document.getElementById("clearFilterBtn").addEventListener("click", () => {
@@ -626,6 +617,7 @@
         document.getElementById("waterRating").value = "";
         document.getElementById("duration").value = "";
         document.getElementById("risk").value = "";
+	document.getElementById("qualityRating").value = "0";
         updateCanyonFilter(); // Reapply filters after clearing
     });
 	      
