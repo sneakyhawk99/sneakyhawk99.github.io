@@ -482,7 +482,6 @@
 	// Execute the query on canyonLayer0 and canyonLayer1
 	Promise.all([
 	canyonLayer0.queryFeatures(query),
-	canyonLayer1.queryFeatures(query)
 	])
 	.then(results => {
 	// Collect all matching canyon names
