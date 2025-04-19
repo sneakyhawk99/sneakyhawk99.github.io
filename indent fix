@@ -287,10 +287,11 @@
 	    
 	// ArcGIS map layers set up
 	require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
-	      
-		const arcgisMap = document.querySelector("arcgis-map");
-		arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-			mapView = arcgisMap.view;
+		// Feature layer - module to add features to the map. Legend - legend widget. reactiveUtils - utility to reacting to events like popup clicks. Query - used to query features
+		const arcgisMap = document.querySelector("arcgis-map");			//get a reference to the <arcgis-map> custom element on the page
+		// Listen for the map view to be fully ready before doing things with it
+		arcgisMap.addEventListener("arcgisViewReadyChange", () => {		
+			mapView = arcgisMap.view;		//save the ready map view to a variable so we can interact with it. Its kind of like a map controller
 		
 			// map bounding box
 			mapView.constraints = {
@@ -452,18 +453,17 @@
 								zoom: 13
 							});
 						}
-					
 				});
-					
+				
 			        // Add a legend for routeLayer
 			        const legend = new Legend({
-			          view: mapView,
-			          layerInfos: [
-			            {
-			              layer: routeLayer,
-			              title: "Route Legend"
-			            }
-			          ]
+					view: mapView,
+				        layerInfos: [
+				        	{
+				        	layer: routeLayer,
+				        	title: "Route Legend"
+				        	}
+				        ]
 			        });
 			
 			        // Add the legend to the bottom-right
@@ -471,157 +471,166 @@
 			
 				// Make route layer prominent when a canyon point or pin is selected
 			        mapView.on("click", (event) => {
-			          mapView.hitTest(event).then((response) => {
-			            if (response.results.length > 0) {
-			              const clickedFeature = response.results[0].graphic;
-			              if (clickedFeature.layer === canyonLayer0 || clickedFeature.layer ===  canyonLayer1) {
-			                      const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
-			            
-			                      // Apply feature effect on the route layer
-			                      routeLayer.featureEffect = {
-			                        filter: {
-			                          where: `CanyonName = '${location}'` // Select all matching canyon segments
-			                        },
-			                        includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
-			                        excludedEffect: "opacity(40%)" // Fade out other canyons
-			                      }; 	//featureEffect
-			            	} else {
-			            		  routeLayer.featureEffect = null;
-				    	}	
-			      	    }; 	// response.results
-			      	  }); 		//mapview hittest
-		      		}); 	//mapView.on	
-			}); //mapview.when
+					mapView.hitTest(event).then((response) => {
+						if (response.results.length > 0) {
+							const clickedFeature = response.results[0].graphic;
+							if (clickedFeature.layer === canyonLayer0 || clickedFeature.layer ===  canyonLayer1) {
+								const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
+							    
+								// Apply feature effect on the route layer
+								routeLayer.featureEffect = {
+									filter: {
+										where: `CanyonName = '${location}'` // Select all matching canyon segments
+									},
+									includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
+									excludedEffect: "opacity(40%)" // Fade out other canyons
+								}; 	//featureEffect
+							} else {
+								// set all the routes to look normal
+								routeLayer.featureEffect = null;
+							}	
+						}; 		// response.results
+					  }); 		// mapview hittest
+		      		}); 		// mapView.on	
+			}); 		// mapview.when
 		
-		    // function to handle the filter update when an input in the search tool changes.
-			//search tool function that will be run when the event listener triggers
+			// define the search/filter tool as a function
 			function updateCanyonFilter () {
-			  //this gets the input from the inputs on the webpage
-			  const searchText = document.getElementById("searchLocation").value.trim();
-			  const tech = document.getElementById("techRating").value;
-			  const water = document.getElementById("waterRating").value;
-			  const duration = document.getElementById("duration").value;
-			  const risk = document.getElementById("risk").value;
-			  const quality = parseFloat(document.getElementById("qualityRating").value);
+				//get user input values from the page 
+				const searchText = document.getElementById("searchLocation").value.trim();
+				const tech = document.getElementById("techRating").value;
+				const water = document.getElementById("waterRating").value;
+				const duration = document.getElementById("duration").value;
+				const risk = document.getElementById("risk").value;
+				const quality = parseFloat(document.getElementById("qualityRating").value);
+
+				//This builds an SQL query clause
+				//start with an empty array
+				let whereClauses = [];
 		
-			  //start with an empty query
-			  let whereClauses = [];
-		
-			  // Build query for name search
-			  // Build the query for Rating (format: 3B IV R)
-			  // Name text search
-			  if (searchText) {
-			  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
-			  }
-			  // Check the technical part (e.g., "3" in "3B IV R")
-			  if (tech) {
-			    whereClauses.push(`Rating LIKE '${tech}%'`); 
-			  }
-			  // Check the water part (e.g., "B" in "3B IV R")
-			  if (water) {
-			    whereClauses.push(`Rating LIKE '%${water}%'`); 
-			  }
-			  // Check the duration part (e.g., "IV" in "3B IV R")
-			  if (duration) {
-			    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
-			  }
-			  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
-			  if (risk === "PG") {
-			    whereClauses.push(`(Rating LIKE '%PG%' OR (Rating NOT LIKE '%R%' AND Rating NOT LIKE '%X%'))`);
-			  } else if (risk === "R") {
-			    whereClauses.push(`Rating LIKE '%R%'`);
-			  } else if (risk === "X") {
-			    whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
-			  }
-			  // check the quality rating part
-			  if (quality) {
-			    whereClauses.push(`Quality >= ${quality}`)
-			  }
+				// Build query for name search with text
+				if (searchText) {
+					whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
+				}
+				// Build the query for Rating (format: 3B IV R) This one comes from one field entry but it is consistent so I can just search for matching text
+				// Check the technical part (e.g., "3" in "3B IV R")
+				if (tech) {
+					whereClauses.push(`Rating LIKE '${tech}%'`); 
+					// I can use the percent to make sure its only searching values at the beginning of the field entry
+				}
+				// Check the water part (e.g., "B" in "3B IV R")
+				if (water) {
+					whereClauses.push(`Rating LIKE '%${water}%'`); 
+				}
+				// Check the duration part (e.g., "IV" in "3B IV R")
+				if (duration) {
+					whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`);
+					// The I in duration gets confused with other values in duration (run a text query searching for I will result in I, II, III, IV, VI) so it either has to match with a space before and after or a space before if it is the end of the entry
+				}
+				// Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
+				if (risk === "PG") {
+					whereClauses.push(`(Rating LIKE '%PG%' OR (Rating NOT LIKE '%R%' AND Rating NOT LIKE '%X%'))`);
+					//most canyons omit the rating if its PG so PG accepts canyons that don't have a risk entry
+				} else if (risk === "R") {
+					whereClauses.push(`Rating LIKE '%R%'`);
+				} else if (risk === "X") {
+					whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
+					// there aren't very many XX canyons on this database so X and XX both come up when X is selected
+				}
+				// check the quality rating part
+				if (quality) {
+				whereClauses.push(`Quality >= ${quality}`)
+				}
 			
-			  // Combine the clauses into a single WHERE expression
-			  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
-			
-			  canyonLayer1.definitionExpression = whereClause;
-			  canyonLayer0.definitionExpression = whereClause;
+			  	// Combine the clauses into a single WHERE expression with AND, or fallback to showing all features
+			  	let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
+
+				// run the filter on the two versions of the canyon point layer that the query corresponds to
+			  	canyonLayer1.definitionExpression = whereClause;
+			  	canyonLayer0.definitionExpression = whereClause;
 		
-			// update canyon count display
-			const countQuery = canyonLayer0.createQuery();
-			countQuery.where = whereClause;
-			countQuery.returnGeometry = false;
+				// update canyon count display
+				// count all the canyons that match the filter then change the active text accordingly
+				const countQuery = canyonLayer0.createQuery();
+				countQuery.where = whereClause;
+				countQuery.returnGeometry = false;
 		
-			canyonLayer0.queryFeatureCount(countQuery).then((count) => {
-				const resultLabel = document.getElementById("filter-result-label");
-				resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} visible`;
-			});
+				canyonLayer0.queryFeatureCount(countQuery).then((count) => {
+					const resultLabel = document.getElementById("filter-result-label");
+					resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} visible`;
+				});
 		
-			// Query canyon layers to get matching canyon names to apply the filter effect on my routeLayer
-			const query = new Query();
-			query.where = whereClause;
-			query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
-			query.returnDistinctValues = true;
-			
-			// Execute the query on canyonLayer0
-			Promise.all([
-			canyonLayer0.queryFeatures(query),
-			])
-			.then(results => {
-			// Collect all matching canyon names
-			let matchingCanyonNames = [];
-			results.forEach(result => {
-			  result.features.forEach(feature => {
-			    matchingCanyonNames.push(feature.attributes.Location);
-			  });
-			});
+				// Query canyon point layer to get matching canyon names to apply the filter effect on my routeLayer (because the rout layer doesn't have the same fields to run the big query on)
+				const query = new Query();
+				query.where = whereClause;
+				query.outFields = ["Location"]; // use location field to match with routelayer
+				query.returnDistinctValues = true;
+				
+				// Execute the query on canyonLayer0
+				Promise.all([
+					canyonLayer0.queryFeatures(query),
+				])
+				.then(results => {
+					// Collect all matching canyon names
+					let matchingCanyonNames = [];
+					results.forEach(result => {
+					  	result.features.forEach(feature => {
+					    		matchingCanyonNames.push(feature.attributes.Location);
+					  	});
+					});
+				
+					// Build a where clause for the route layer to ony show routes with matching fields
+					let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+					console.log("routeWhereClause:", routeWhereClause); // for debugging earlier I can probably get rid of this
+					routeLayer.definitionExpression = routeWhereClause;
+				})
+				.catch(error => {
+					console.error("Error querying canyon layers: ", error);
+					// to be safe
+				});
+			} 		//filter/search tool function define
 		
-			// Filter routeLayer based on matching canyon names
-			let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
-			console.log("routeWhereClause:", routeWhereClause);
-			routeLayer.definitionExpression = routeWhereClause;
-			})
-			.catch(error => {
-			  console.error("Error querying canyon layers: ", error);
-			});
-			} //search tool
+		    	// delay to try to fix filter issue (I may be able to fix it by changing input in the following section to calciteInputChange, but this delay works great
+		    	let filterTimeout;
+		    	const filterDelay = 100; //Adjust the delay in milliseconds
 		
-		    // delay to try to fix filter issue (I may be able to fix it but changing input in the following section to calciteInputChange, but this delay works so I have other stuff to worry about
-		    let filterTimeout;
-		    const filterDelay = 100; //Adjust the delay in milliseconds
-		
-		   function handleFilterInputChange() {
-			   clearTimeout(filterTimeout);
-			   filterTimeout = setTimeout(updateCanyonFilter, filterDelay);
-		   }
+		   	function handleFilterInputChange() {
+			   	clearTimeout(filterTimeout);
+			   	filterTimeout = setTimeout(updateCanyonFilter, filterDelay);
+		   	}
 			      
-		    // Add event listeners to inputs to trigger the filter update on change
-		    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange); //to update with every letter typed
-		    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange); //to update the map when pressing the x to get rid of text
-		    document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
-		    document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
-		    document.getElementById("duration").addEventListener("input", handleFilterInputChange);
-		    document.getElementById("risk").addEventListener("input", handleFilterInputChange);
-		    document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
+			// Add event listeners to inputs to trigger the filter update on change
+			document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange); //to update with every letter typed
+			document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange); //to update the map when pressing the x to get rid of text
+			document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
+			document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
+			document.getElementById("duration").addEventListener("input", handleFilterInputChange);
+			document.getElementById("risk").addEventListener("input", handleFilterInputChange);
+			document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
 		
-		    // Clear filter logic
-		    document.getElementById("clearFilterBtn").addEventListener("click", () => {
-		        canyonLayer1.definitionExpression = "1=1";
-		        canyonLayer0.definitionExpression = "1=1";
-		        routeLayer.definitionExpression = "1=1";
-		        document.getElementById("searchLocation").value = "";
-		        document.getElementById("techRating").value = "";
-		        document.getElementById("waterRating").value = "";
-		        document.getElementById("duration").value = "";
-		        document.getElementById("risk").value = "";
-			document.getElementById("qualityRating").value = "0";
-		        updateCanyonFilter(); // Reapply filters after clearing
-		    });
-			      
-			      
-			// Apply the filter when the map is ready      
+		    	// Clear filter button
+			// first listens for a click on the clear button
+		    	document.getElementById("clearFilterBtn").addEventListener("click", () => {
+				// get rid of any filtering
+				canyonLayer1.definitionExpression = "1=1";
+				canyonLayer0.definitionExpression = "1=1";
+				routeLayer.definitionExpression = "1=1";
+				// get rid of any inputs
+				document.getElementById("searchLocation").value = "";
+				document.getElementById("techRating").value = "";
+				document.getElementById("waterRating").value = "";
+				document.getElementById("duration").value = "";
+				document.getElementById("risk").value = "";
+				document.getElementById("qualityRating").value = "0"; 	// this input is on a slider so reset it to 0
+				updateCanyonFilter(); // Reapply filters after clearing
+		    	});
+			         
+			// Apply the filter when the map is ready. This makes sure the canyon text is ready and the filter has been run with all the default null values   
 			updateCanyonFilter();
 		
 			      
-		      }); 		//arcgis event listener	    
-	    }); 		//Arcgis require end
+		}); 		//arcgis event listener	    
+	}); 		//Arcgis require end
 
 	    
 </script>
