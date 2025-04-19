@@ -241,7 +241,7 @@
   
 <script>    
 	    
-	//function to handle the display of the different tabs. evt is event, tabname is the specific tab I want to display
+	//function to handle the display of the different tabs. evt is event, tabname is the specific tab I want to display. This function is found in the HTML of my buttons. When I click a button, it closes any open tabs and desects the button and then opens and selects the one I click
 	function openTab(evt, tabName) {
 		var i, tabcontent, tablinks;
 	    
@@ -259,366 +259,370 @@
 			tablinks[i].classList.remove("active");
 		}
 	
-		//show the clicked tab content and add active class to clicked tab
+		//show the clicked tab content and add active class to clicked tab. This next one grabs the tab name and displays that tab
 		document.getElementById(tabName).style.display = "block";
+		//This one figures out which one i clicked and darkens it
 		evt.currentTarget.classList.add("active");
 	}
+	// Open the Introduction tab by default when the page loads
+	document.addEventListener("DOMContentLoaded", function () {
+		document.getElementById("intro").style.display = "block"; // Show intro tab
+		document.querySelector(".tablinks").classList.add("active"); // darken Introduction tab button
+    	});
+
+	// close tab button at the bottom of the tabs
+	document.querySelectorAll(".closeTabBtn").forEach(btn => {
+		// similar function as above. Loops through the tab box html and closes it, looks through the tab buttons and undarkens them
+		btn.addEventListener("click", function () {
+			var tabcontent = document.getElementsByClassName("tabcontent");
+			for (var i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none"; // Hide all tabs
+			}
+			var tablinks = document.getElementsByClassName("tablinks");
+			for (var i = 0; i < tablinks.length; i++) {
+				tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
+			}
+		});
+	});
 	    
-    // ArcGIS map layers set up
-    require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
-      
-      const arcgisMap = document.querySelector("arcgis-map");
-      arcgisMap.addEventListener("arcgisViewReadyChange", () => {
-        mapView = arcgisMap.view;
-
-	// map bounding box
-	mapView.constraints = {
-		minZoom: 6,
-		geometry: {
-			type: "extent",
-			xmin: -114.0,
-			ymin: 36.5,
-			xmax: -109.0,
-			ymax: 42.0,
-			spatialReference: {wkid: 4326}
-      		}
-	};
-	
-        // Define a pop-up for canyonLayer0
-        const popupCanyons0 = {
-          title: "{Location}",
-	  overwriteActions: true, //allow for custom action bar
-	  //define more information action
-	  actions: [
-		{
-		title: "Ropewiki Profile", 
-		id: "info", 
-		className: "esri-icon-globe"	
-	  }],
-	  // I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
-	  // for most of them I'm just pulling the value of the field. I have a query for duration, distance, number of rappels, and longest rappel
-	  // duration has its own constant because I am pulling from two different fields
-	  content: (feature) => {
-		const attrs = feature.graphic.attributes;
-		    console.log(attrs);
-	        
-	        // Helper function to check for 0 and return "No data"
-	        const formatValue = (val, unit = "", suffix = "") => {
-	        	return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
-	        };
-	        
-	        const duration = (attrs.MinTimeHrs ===0 && attrs.MaxTimeHrs > 0)
-			? `${attrs.MaxTimeHrs} hrs`
-			: (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0))
-				? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
-				: "No data";
-	        
-	        return `
-	              <b>Canyon:</b> ${attrs.Location}<br>
-	              <b>Region:</b> ${attrs.Region}<br>
-	              <b>Quality Rating:</b> ${attrs.Quality}<br>
-	              <b>Technical Rating:</b> ${attrs.Rating}<br>
-	              <b>Duration:</b> ${duration}<br>
-	              <b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
-	              <b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
-	              <b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
-	              <b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
-	        	
-	            `;
-		  //I took out the link portion because I got the icon thing to work. Here it is if I want to put in both
-		  //<b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
-          }
-        };
-
-	// Define a pop-up for canyonLayer1
-        const popupCanyons1 = {
-          title: "{Location}",
-	  overwriteActions: true, //allow for custom action bar
-	  //define more information action
-	  actions: [
-		{
-		title: "Zoom to Canyon",
-		id: "custom-zoom",
-		className: "esri-icon-zoom-in-magnifying-glass"
-		},
-		{
-		title: "Ropewiki Profile", 
-		id: "info", 
-		className: "esri-icon-globe"	
-	  	}
-	  ],
+	// ArcGIS map layers set up
+	require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
+	      
+		const arcgisMap = document.querySelector("arcgis-map");
+		arcgisMap.addEventListener("arcgisViewReadyChange", () => {
+			mapView = arcgisMap.view;
 		
-	  content: (feature) => {
-		const attrs = feature.graphic.attributes;
-		    console.log(attrs);
-	        
-	        // Helper function to check for 0 and return "No data"
-	        const formatValue = (val, unit = "", suffix = "") => {
-	        	return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
-	        };
-	        
-	        const duration = (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0)) 
-	              ? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
-	              : "No data";
-	        
-	        return `
-	              <b>Canyon:</b> ${attrs.Location}<br>
-	              <b>Region:</b> ${attrs.Region}<br>
-	              <b>Quality Rating:</b> ${attrs.Quality}<br>
-	              <b>Technical Rating:</b> ${attrs.Rating}<br>
-	              <b>Duration:</b> ${duration}<br>
-	              <b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
-	              <b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
-	              <b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
-	              <b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
-	            `;
-          }
-        };
+			// map bounding box
+			mapView.constraints = {
+				minZoom: 6,
+				geometry: {
+					type: "extent",
+					xmin: -114.0,
+					ymin: 36.5,
+					xmax: -109.0,
+					ymax: 42.0,
+					spatialReference: {wkid: 4326}
+		      		}
+			};
+			
+		        // Define a pop-up for canyonLayer0
+		        const popupCanyons0 = {
+				title: "{Location}",
+				overwriteActions: true, //allow for custom action bar
+				//define link action
+				actions: [
+					{
+					title: "Ropewiki Profile", 
+					id: "info", 
+					className: "esri-icon-globe"	
+				}],
 
-        // define and add Canyon route layer (lines)
-        const routeLayer = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
-	        outFields: ["CanyonName"]
-        });
-	      
-        arcgisMap.addLayer(routeLayer);
-	      
-        // define and add Canyon pin feature layer (zoomed in) and its popup (points)
-        const canyonLayer0 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
-          popupTemplate: popupCanyons0,
-	  outFields: ["*"]
-        });
+				// I use a function to give me the content because some fields have a 0 instead of no data in my data set, and I want it to display as "No data"
+				// for most of them I'm just pulling the value of the field. I have a query for name, duration, distance, number of rappels, and longest rappel
+				// duration has its own constant because I am pulling from two different fields
+				content: (feature) => {
+					// this just pulls the value of the attribute as is
+					const attrs = feature.graphic.attributes;
+						console.log(attrs);
+				        
+				        // Helper function to check for 0 and return "No data"
+				        const formatValue = (val, unit = "", suffix = "") => {
+				        	return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
+				        };
 
-        arcgisMap.addLayer(canyonLayer0);
-
-        // define and add Canyon dot feature layer (zoomed out) and its popup (points)
-        const canyonLayer1 = new FeatureLayer({
-          url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2",
-	  popupTemplate: popupCanyons1,
-	  outFields: ["*"]
-        });
-
-      	arcgisMap.addLayer(canyonLayer1);
-
-	// Dock the popup to top-right      
-      	mapView.when(() => {
-      	    mapView.popup.dockEnabled = true;
-      	    mapView.popup.dockOptions = {
-      	      buttonEnabled: false,      // Optional: removes the dock button
-      	      position: "top-right",     // Dock to top-right
-      	      breakpoint: false          // Always docked, even on large screens
-      	};
-
-	// Popup action bar - Follow link to more info, custom zoom
-	reactiveUtils.on(
-		() => mapView.popup,
-		"trigger-action",
-		(event) => {
-			const feature = mapView.popup.selectedFeature;
-
-			if (event.action.id === "info") {
-				const linkUrl = feature.attributes.links_1;
-				if (linkUrl) {
-					window.open(linkUrl, "_blank");
+					// Helper function to get this value from two fields and account for no data in one or both of the fields
+				        const duration = (attrs.MinTimeHrs ===0 && attrs.MaxTimeHrs > 0)
+						? `${attrs.MaxTimeHrs} hrs`
+						: (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0))
+							? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
+							: "No data";
+				        return `
+						<b>Canyon:</b> ${attrs.Location}<br>
+						<b>Region:</b> ${attrs.Region}<br>
+						<b>Quality Rating:</b> ${attrs.Quality}<br>
+						<b>Technical Rating:</b> ${attrs.Rating}<br>
+						<b>Duration:</b> ${duration}<br>
+						<b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
+						<b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
+						<b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
+						<b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
+						
+					`;
+					//I took out the link portion because I got the icon thing to work. Here it is if I want to put in both
+					//<b>More Information:</b> <a href='${attrs.links_1}' target='_blank'>${attrs.links_1}</a><br>
+			        }
+		        }; //const popupcanyon0 end
+		
+			// Define a pop-up for canyonLayer1
+		        const popupCanyons1 = {
+				title: "{Location}",
+				overwriteActions: true, //allow for custom action bar
+				//define more information action
+				actions: [
+					{
+					title: "Zoom to Canyon",
+					id: "custom-zoom",
+					className: "esri-icon-zoom-in-magnifying-glass"
+					},
+					{
+					title: "Ropewiki Profile", 
+					id: "info", 
+					className: "esri-icon-globe"	
+				  	}
+				],
+					
+				content: (feature) => {
+					const attrs = feature.graphic.attributes;
+						console.log(attrs);
+				        
+				        // Helper function to check for 0 and return "No data"
+				        const formatValue = (val, unit = "", suffix = "") => {
+				        	return val && val !== 0 ? `${val}${unit}${suffix}` : "No data";
+				        };
+				        
+				        const duration = (attrs.MinTimeHrs && attrs.MaxTimeHrs && (attrs.MinTimeHrs !== 0 || attrs.MaxTimeHrs !== 0)) 
+				        	? `${attrs.MinTimeHrs}-${attrs.MaxTimeHrs} hrs`
+				        	: "No data";
+				        
+					return `
+				        	<b>Canyon:</b> ${attrs.Location}<br>
+				        	<b>Region:</b> ${attrs.Region}<br>
+						<b>Quality Rating:</b> ${attrs.Quality}<br>
+						<b>Technical Rating:</b> ${attrs.Rating}<br>
+						<b>Duration:</b> ${duration}<br>
+						<b>Distance:</b> ${formatValue(attrs.DistMi, "mi")}<br>
+						<b>Number of Rappels:</b> ${formatValue(attrs.Rappels)}<br>
+						<b>Longest Rappel:</b> ${formatValue(attrs.LongestRFt, "ft")}<br>
+						<b>Best Season:</b> ${attrs.BestSeason || "No data"}<br>
+				        `;
 				}
-			}
-
-			if (event.action.id === "custom-zoom") {
-				mapView.goTo({
-					target: feature.geometry,
-					zoom: 13
-				});
-			}
-	});
+		        }; // define popup canyonlayer1 end
 		
-        // Add a legend for routeLayer
-        const legend = new Legend({
-          view: mapView,
-          layerInfos: [
-            {
-              layer: routeLayer,
-              title: "Route Legend"
-            }
-          ]
-        });
+		        // define and add Canyon route layer (lines)
+			const routeLayer = new FeatureLayer({
+		        	url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/3",
+			        outFields: ["CanyonName"]
+		        });     
+			arcgisMap.addLayer(routeLayer);
 
-        // Add the legend to the bottom-right
-        mapView.ui.add(legend, "bottom-right");
 
-	// Make route layer prominent when a canyon point or pin is selected
-        mapView.on("click", (event) => {
-          mapView.hitTest(event).then((response) => {
-            if (response.results.length > 0) {
-              const clickedFeature = response.results[0].graphic;
-              if (clickedFeature.layer === canyonLayer0 || clickedFeature.layer ===  canyonLayer1) {
-                      const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
-            
-                      // Apply feature effect on the route layer
-                      routeLayer.featureEffect = {
-                        filter: {
-                          where: `CanyonName = '${location}'` // Select all matching canyon segments
-                        },
-                        includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
-                        excludedEffect: "opacity(40%)" // Fade out other canyons
-                      }; 	//featureEffect
-            	} else {
-            		  routeLayer.featureEffect = null;
-	    	}	
-      	    }; 	// response.results
-      	  }); 		//mapview hittest
-      	}); 		//mapview.when
-	});
+		        // define and add Canyon pin feature layer (zoomed in) and its popup (points)
+		        const canyonLayer0 = new FeatureLayer({
+				url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/1",
+				popupTemplate: popupCanyons0,
+				outFields: ["*"]
+		        });
+		        arcgisMap.addLayer(canyonLayer0);
 
-    // function to handle the filter update when an input in the search tool changes.
-	//search tool function that will be run when the event listener triggers
-	function updateCanyonFilter () {
-	  //this gets the input from the inputs on the webpage
-	  const searchText = document.getElementById("searchLocation").value.trim();
-	  const tech = document.getElementById("techRating").value;
-	  const water = document.getElementById("waterRating").value;
-	  const duration = document.getElementById("duration").value;
-	  const risk = document.getElementById("risk").value;
-	  const quality = parseFloat(document.getElementById("qualityRating").value);
 
-	  //start with an empty query
-	  let whereClauses = [];
+		        // define and add Canyon dot feature layer (zoomed out) and its popup (points)
+		        const canyonLayer1 = new FeatureLayer({
+				url: "https://services.arcgis.com/FvF9MZKp3JWPrSkg/arcgis/rest/services/Utah_Technical_Canyoneering_Routes/FeatureServer/2",
+				popupTemplate: popupCanyons1,
+				outFields: ["*"]
+		        });
+		      	arcgisMap.addLayer(canyonLayer1);
 
-	  // Build query for name search
-	  // Build the query for Rating (format: 3B IV R)
-	  // Name text search
-	  if (searchText) {
-	  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
-	  }
-	  // Check the technical part (e.g., "3" in "3B IV R")
-	  if (tech) {
-	    whereClauses.push(`Rating LIKE '${tech}%'`); 
-	  }
-	  // Check the water part (e.g., "B" in "3B IV R")
-	  if (water) {
-	    whereClauses.push(`Rating LIKE '%${water}%'`); 
-	  }
-	  // Check the duration part (e.g., "IV" in "3B IV R")
-	  if (duration) {
-	    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
-	  }
-	  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
-	  if (risk === "PG") {
-	    whereClauses.push(`(Rating LIKE '%PG%' OR (Rating NOT LIKE '%R%' AND Rating NOT LIKE '%X%'))`);
-	  } else if (risk === "R") {
-	    whereClauses.push(`Rating LIKE '%R%'`);
-	  } else if (risk === "X") {
-	    whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
-	  }
-	  // check the quality rating part
-	  if (quality) {
-	    whereClauses.push(`Quality >= ${quality}`)
-	  }
-	
-	  // Combine the clauses into a single WHERE expression
-	  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
-	
-	  canyonLayer1.definitionExpression = whereClause;
-	  canyonLayer0.definitionExpression = whereClause;
 
-	// update canyon count display
-	const countQuery = canyonLayer0.createQuery();
-	countQuery.where = whereClause;
-	countQuery.returnGeometry = false;
-
-	canyonLayer0.queryFeatureCount(countQuery).then((count) => {
-		const resultLabel = document.getElementById("filter-result-label");
-		resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} visible`;
-	});
-
-	// Query canyon layers to get matching canyon names to apply the filter effect on my routeLayer
-	const query = new Query();
-	query.where = whereClause;
-	query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
-	query.returnDistinctValues = true;
-	
-	// Execute the query on canyonLayer0
-	Promise.all([
-	canyonLayer0.queryFeatures(query),
-	])
-	.then(results => {
-	// Collect all matching canyon names
-	let matchingCanyonNames = [];
-	results.forEach(result => {
-	  result.features.forEach(feature => {
-	    matchingCanyonNames.push(feature.attributes.Location);
-	  });
-	});
-
-	// Filter routeLayer based on matching canyon names
-	let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
-	console.log("routeWhereClause:", routeWhereClause);
-	routeLayer.definitionExpression = routeWhereClause;
-	})
-	.catch(error => {
-	  console.error("Error querying canyon layers: ", error);
-	});
-	} //search tool
-
-    // delay to try to fix filter issue (I may be able to fix it but changing input in the following section to calciteInputChange, but this delay works so I have other stuff to worry about
-    let filterTimeout;
-    const filterDelay = 100; //Adjust the delay in milliseconds
-
-   function handleFilterInputChange() {
-	   clearTimeout(filterTimeout);
-	   filterTimeout = setTimeout(updateCanyonFilter, filterDelay);
-   }
-	      
-    // Add event listeners to inputs to trigger the filter update on change
-    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange); //to update with every letter typed
-    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange); //to update the map when pressing the x to get rid of text
-    document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
-    document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
-    document.getElementById("duration").addEventListener("input", handleFilterInputChange);
-    document.getElementById("risk").addEventListener("input", handleFilterInputChange);
-    document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
-
-    // Clear filter logic
-    document.getElementById("clearFilterBtn").addEventListener("click", () => {
-        canyonLayer1.definitionExpression = "1=1";
-        canyonLayer0.definitionExpression = "1=1";
-        routeLayer.definitionExpression = "1=1";
-        document.getElementById("searchLocation").value = "";
-        document.getElementById("techRating").value = "";
-        document.getElementById("waterRating").value = "";
-        document.getElementById("duration").value = "";
-        document.getElementById("risk").value = "";
-	document.getElementById("qualityRating").value = "0";
-        updateCanyonFilter(); // Reapply filters after clearing
-    });
-	      
-	      
-	// Apply the filter when the map is ready      
-	updateCanyonFilter();
-
-	      
-      }); 		//arcgis event listener	    
-    }); 		//require end
-	    
-    // Open the Introduction tab by default when the page loads
-    document.addEventListener("DOMContentLoaded", function () {
-    	document.getElementById("intro").style.display = "block"; // Show intro tab
-    	document.querySelector(".tablinks").classList.add("active"); // Highlight Introduction tab button
-    });
-
-	// close tab to work for all buttons
-	    document.querySelectorAll(".closeTabBtn").forEach(btn => {
-		    btn.addEventListener("click", function () {
-			    var tabcontent = document.getElementsByClassName("tabcontent");
-			    for (var i = 0; i < tabcontent.length; i++) {
-				 tabcontent[i].style.display = "none"; // Hide all tabs
-			    }
-			    var tablinks = document.getElementsByClassName("tablinks");
-			    for (var i = 0; i < tablinks.length; i++) {
-				    tablinks[i].classList.remove("active"); // Remove active class from all tab buttons
-			    }
+			// use mapview.when to run this code AFTER the map has loaded
+		      	mapView.when(() => {
+				// Dock the popup to top-right 
+				mapView.popup.dockEnabled = true;
+				mapView.popup.dockOptions = {
+			      		buttonEnabled: false,		// Optional: removes the dock button
+			      		position: "top-right",     	// Dock to top-right
+			      		breakpoint: false          	// Always docked, even on large screens
+				};
+			
+				// Popup action bar - Follow link to more info, custom zoom
+				reactiveUtils.on(
+					() => mapView.popup,		//watch the popup object
+					"trigger-action",		// listen for a trigger action event (user clicks a popup action)
+					(event) => {			// what happens when the action is triggered
+						const feature = mapView.popup.selectedFeature;		//grab the currently selected feature
+						if (event.action.id === "info") {			//if they click the info (ropewiki) button, get the link form the field, open that page in a blank screen
+							const linkUrl = feature.attributes.links_1;
+							if (linkUrl) {
+								window.open(linkUrl, "_blank");
+							}
+						}
+						if (event.action.id === "custom-zoom") {		// if you click on zoom it goes to that geometry at the set zoom level
+							mapView.goTo({
+								target: feature.geometry,
+								zoom: 13
+							});
+						}
+					
+				});
+					
+			        // Add a legend for routeLayer
+			        const legend = new Legend({
+			          view: mapView,
+			          layerInfos: [
+			            {
+			              layer: routeLayer,
+			              title: "Route Legend"
+			            }
+			          ]
+			        });
+			
+			        // Add the legend to the bottom-right
+			        mapView.ui.add(legend, "bottom-right");
+			
+				// Make route layer prominent when a canyon point or pin is selected
+			        mapView.on("click", (event) => {
+			          mapView.hitTest(event).then((response) => {
+			            if (response.results.length > 0) {
+			              const clickedFeature = response.results[0].graphic;
+			              if (clickedFeature.layer === canyonLayer0 || clickedFeature.layer ===  canyonLayer1) {
+			                      const location = clickedFeature.attributes.Location; // Get the selected canyon's name from the pin layer
+			            
+			                      // Apply feature effect on the route layer
+			                      routeLayer.featureEffect = {
+			                        filter: {
+			                          where: `CanyonName = '${location}'` // Select all matching canyon segments
+			                        },
+			                        includedEffect: "bloom(2, 4px, 0%)", // Highlight selected canyon
+			                        excludedEffect: "opacity(40%)" // Fade out other canyons
+			                      }; 	//featureEffect
+			            	} else {
+			            		  routeLayer.featureEffect = null;
+				    	}	
+			      	    }; 	// response.results
+			      	  }); 		//mapview hittest
+		      		}); 	//mapView.on	
+			}); //mapview.when
+		
+		    // function to handle the filter update when an input in the search tool changes.
+			//search tool function that will be run when the event listener triggers
+			function updateCanyonFilter () {
+			  //this gets the input from the inputs on the webpage
+			  const searchText = document.getElementById("searchLocation").value.trim();
+			  const tech = document.getElementById("techRating").value;
+			  const water = document.getElementById("waterRating").value;
+			  const duration = document.getElementById("duration").value;
+			  const risk = document.getElementById("risk").value;
+			  const quality = parseFloat(document.getElementById("qualityRating").value);
+		
+			  //start with an empty query
+			  let whereClauses = [];
+		
+			  // Build query for name search
+			  // Build the query for Rating (format: 3B IV R)
+			  // Name text search
+			  if (searchText) {
+			  whereClauses.push(`UPPER(Location) LIKE '%${searchText.toUpperCase()}%'`)
+			  }
+			  // Check the technical part (e.g., "3" in "3B IV R")
+			  if (tech) {
+			    whereClauses.push(`Rating LIKE '${tech}%'`); 
+			  }
+			  // Check the water part (e.g., "B" in "3B IV R")
+			  if (water) {
+			    whereClauses.push(`Rating LIKE '%${water}%'`); 
+			  }
+			  // Check the duration part (e.g., "IV" in "3B IV R")
+			  if (duration) {
+			    whereClauses.push(`(Rating LIKE '% ${duration} %' OR Rating LIKE '% ${duration}')`); 
+			  }
+			  // Check the risk part (e.g., "R" in "3B IV R") Many canyons don't have a risk rating so if PG is selected, the filter also displays the canyons that have no risk rating
+			  if (risk === "PG") {
+			    whereClauses.push(`(Rating LIKE '%PG%' OR (Rating NOT LIKE '%R%' AND Rating NOT LIKE '%X%'))`);
+			  } else if (risk === "R") {
+			    whereClauses.push(`Rating LIKE '%R%'`);
+			  } else if (risk === "X") {
+			    whereClauses.push(`(Rating LIKE '%X%' OR Rating LIKE '%XX%')`); // Include both X and XX
+			  }
+			  // check the quality rating part
+			  if (quality) {
+			    whereClauses.push(`Quality >= ${quality}`)
+			  }
+			
+			  // Combine the clauses into a single WHERE expression
+			  let whereClause = whereClauses.length > 0 ? whereClauses.join(" AND ") : "1=1";
+			
+			  canyonLayer1.definitionExpression = whereClause;
+			  canyonLayer0.definitionExpression = whereClause;
+		
+			// update canyon count display
+			const countQuery = canyonLayer0.createQuery();
+			countQuery.where = whereClause;
+			countQuery.returnGeometry = false;
+		
+			canyonLayer0.queryFeatureCount(countQuery).then((count) => {
+				const resultLabel = document.getElementById("filter-result-label");
+				resultLabel.textContent = `${count} canyon${count === 1 ? "" : "s"} visible`;
+			});
+		
+			// Query canyon layers to get matching canyon names to apply the filter effect on my routeLayer
+			const query = new Query();
+			query.where = whereClause;
+			query.outFields = ["Location"]; // Adjust this based on your actual field name in the canyon layers
+			query.returnDistinctValues = true;
+			
+			// Execute the query on canyonLayer0
+			Promise.all([
+			canyonLayer0.queryFeatures(query),
+			])
+			.then(results => {
+			// Collect all matching canyon names
+			let matchingCanyonNames = [];
+			results.forEach(result => {
+			  result.features.forEach(feature => {
+			    matchingCanyonNames.push(feature.attributes.Location);
+			  });
+			});
+		
+			// Filter routeLayer based on matching canyon names
+			let routeWhereClause = "canyonName IN ('" + matchingCanyonNames.join("', '") + "')";
+			console.log("routeWhereClause:", routeWhereClause);
+			routeLayer.definitionExpression = routeWhereClause;
+			})
+			.catch(error => {
+			  console.error("Error querying canyon layers: ", error);
+			});
+			} //search tool
+		
+		    // delay to try to fix filter issue (I may be able to fix it but changing input in the following section to calciteInputChange, but this delay works so I have other stuff to worry about
+		    let filterTimeout;
+		    const filterDelay = 100; //Adjust the delay in milliseconds
+		
+		   function handleFilterInputChange() {
+			   clearTimeout(filterTimeout);
+			   filterTimeout = setTimeout(updateCanyonFilter, filterDelay);
+		   }
+			      
+		    // Add event listeners to inputs to trigger the filter update on change
+		    document.getElementById("searchLocation").addEventListener("input", handleFilterInputChange); //to update with every letter typed
+		    document.getElementById("searchLocation").addEventListener("calciteInputChange", handleFilterInputChange); //to update the map when pressing the x to get rid of text
+		    document.getElementById("techRating").addEventListener("input", handleFilterInputChange);
+		    document.getElementById("waterRating").addEventListener("input", handleFilterInputChange);
+		    document.getElementById("duration").addEventListener("input", handleFilterInputChange);
+		    document.getElementById("risk").addEventListener("input", handleFilterInputChange);
+		    document.getElementById("qualityRating").addEventListener("calciteSliderChange", handleFilterInputChange);
+		
+		    // Clear filter logic
+		    document.getElementById("clearFilterBtn").addEventListener("click", () => {
+		        canyonLayer1.definitionExpression = "1=1";
+		        canyonLayer0.definitionExpression = "1=1";
+		        routeLayer.definitionExpression = "1=1";
+		        document.getElementById("searchLocation").value = "";
+		        document.getElementById("techRating").value = "";
+		        document.getElementById("waterRating").value = "";
+		        document.getElementById("duration").value = "";
+		        document.getElementById("risk").value = "";
+			document.getElementById("qualityRating").value = "0";
+		        updateCanyonFilter(); // Reapply filters after clearing
 		    });
-	    });
+			      
+			      
+			// Apply the filter when the map is ready      
+			updateCanyonFilter();
+		
+			      
+		      }); 		//arcgis event listener	    
+	    }); 		//Arcgis require end
+
 	    
 </script>
 
