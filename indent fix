@@ -1,59 +1,58 @@
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
-    <title>Technical Canyoneering Routes Utah</title>
-    <link rel="icon" type="image/png" href="desertfavicon.png">
-    <link rel="stylesheet" href="styles.css">
-    <style>
-      html, body {
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-      }
-      arcgis-map {
-        display: block;
-        height: 100vh; /* Full height */ 
-        width: 100vw;
-      }
-      
-    </style>
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+	<title>Technical Canyoneering Routes Utah</title>
+	<link rel="icon" type="image/png" href="desertfavicon.png">
+	<link rel="stylesheet" href="styles.css">
+	<style>
+		html, body {
+		padding: 0;
+		margin: 0;
+		height: 100%;
+		width: 100%;
+		}
+		arcgis-map {
+		display: block;
+		height: 100vh; /* Full height */ 
+		width: 100vw;
+		}
 
-    <script>
-      var esriConfig = {
-        apiKey: "AAPTxy8BH1VEsoebNVZXo8HurCUGQrXu3erpYf0aHrvNXlY2k_bHzGoRbEOMeM4CovQLQ4_5TDEXRExKbeJ3G1gzUztP-y2kZBZaQAZUTxjwO3XIGYBNBBQ9fCXGLyy2xrH6UWabeLBjzxxsTVZkajEazOjaXx1a4u-FDW1L_zcutIqIe397yc7pDNGcyPJoFXHCwbaZkZ1amHxvnMRDfu2hMnE36f1fM8rdhpbEEzSW_CE.AT1_2TyVjxUD"
-      };
-    </script>
+	</style>
 
-    <!-- Load Calcite components from CDN -->
-    <script type="module" src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"></script>
+	<script>
+		var esriConfig = {
+			apiKey: "AAPTxy8BH1VEsoebNVZXo8HurCUGQrXu3erpYf0aHrvNXlY2k_bHzGoRbEOMeM4CovQLQ4_5TDEXRExKbeJ3G1gzUztP-y2kZBZaQAZUTxjwO3XIGYBNBBQ9fCXGLyy2xrH6UWabeLBjzxxsTVZkajEazOjaXx1a4u-FDW1L_zcutIqIe397yc7pDNGcyPJoFXHCwbaZkZ1amHxvnMRDfu2hMnE36f1fM8rdhpbEEzSW_CE.AT1_2TyVjxUD"
+		};
+	</script>
 
-    <!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
-    <link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
-    <script src="https://js.arcgis.com/4.32/"></script>
+	<!-- Load Calcite components from CDN -->
+	<script type="module" src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"></script>
+	
+	<!-- Load the ArcGIS Maps SDK for JavaScript from CDN -->
+	<link rel="stylesheet" href="https://js.arcgis.com/4.32/esri/themes/light/main.css" />
+	<script src="https://js.arcgis.com/4.32/"></script>
+	
+	<!-- Load Map components from CDN-->
+	<script
+	      type="module"
+	      src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"
+	></script>
+</head>
 
-    <!-- Load Map components from CDN-->
-    <script
-      type="module"
-      src="https://js.arcgis.com/map-components/4.32/arcgis-map-components.esm.js"
-    ></script>
+<body>
 
-  </head>
-
-  <body>
-
-    <arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
-      <arcgis-zoom position="bottom-right"></arcgis-zoom>
-    </arcgis-map>
+	<arcgis-map basemap="arcgis/topographic" center="-111.427031, 39.212335" zoom="7.5">
+		<arcgis-zoom position="bottom-right"></arcgis-zoom>
+	</arcgis-map>
 	  
-    <!-- interface pannel on side  --> 
-    <div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
-	<!-- Tab links -->
-	<div class="tab">
-		<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
-		<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
-		<button class="tablinks" onclick="openTab(event, 'search')">Search Tool</button>
+	<!-- interface pannel on side  --> 
+	<div id="interface" style="position: absolute; font-size: 0.9em; left: 25px; top: 25px; width: 400px; z-index: 50; padding: 5px; background-color: rgb(245, 209, 188); <!-- box-shadow: rgba(0, 0, 0, 0.31) 5px 5px; --> max-width: 90%; max-height: 90%; overflow-y: auto; display: block;">
+		<!-- Tab links -->
+		<div class="tab">
+			<button class="tablinks" onclick="openTab(event, 'intro')">Introduction</button>
+			<button class="tablinks" onclick="openTab(event, 'rating')">Rating System</button>
+			<button class="tablinks" onclick="openTab(event, 'search')">Search Tool</button>
 	</div>
 			
 	<!-- Tab Content -->    
@@ -123,140 +122,147 @@
 	<div id="search" class="tabcontent">
 		<br>
 		<h2>Find a Canyon</h2>
-		      <h3>Select attributes below to explore canyon routes that fit those specifications.</h3>
-		      <p>Remember that ratings are subjective and canyon conditions can vary. <strong>ALWAYS do your research</strong> and prepare sufficiently before visiting a new canyon. 
-			      Follow the "More Information" link in each canyon's popup to learn more about the conditions and beta of a specific route.</p>
+		<h3>Select attributes below to explore canyon routes that fit those specifications.</h3>
+		<p>Remember that ratings are subjective and canyon conditions can vary. <strong>ALWAYS do your research</strong> and prepare sufficiently before visiting a new canyon. 
+			Follow the "More Information" link in each canyon's popup to learn more about the conditions and beta of a specific route.</p>
 
-			<!-- number of canyons visible-->
-			<div id="filter-result-label" style="margin-bottom: 15px; font-weight: bold; color: red;"></div>
+		<!-- number of canyons visible-->
+		<div id="filter-result-label" style="margin-bottom: 15px; font-weight: bold; color: red;"></div>
 
-		
-			<calcite-label style= "font-weight: bold">
-			  Filter by Canyon Name:
-			  <calcite-input id="searchLocation" placeholder="Enter canyon name" icon="magnifying-glass" clearable></calcite-input>
-			</calcite-label>
+		<!-- Canyon name filter -->
+		<calcite-label style= "font-weight: bold">
+			Filter by Canyon Name:
+			<calcite-input id="searchLocation" placeholder="Enter canyon name" icon="magnifying-glass" clearable></calcite-input>
+		</calcite-label>
 
-			<calcite-label style="font-weight: bold">
-			  Technical Rating
-			</calcite-label>
-		
-			<calcite-label>
-			  <div style="display: flex; align-items: center; justify-content: space-between;">
-			  	Skill
-				  <calcite-icon id="skill-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-				  <calcite-tooltip reference-element="skill-tooltip-icon" placement="top">
-				    3 - Technical Rappelling, 4 - Advanced Technical Rappelling
-				  </calcite-tooltip>					  
-			  </div>
-			  <calcite-select id="techRating">
-			    <calcite-option value="">Any</calcite-option>
-			    <calcite-option value="3">3</calcite-option>
-			    <calcite-option value="4">4</calcite-option>
-			  </calcite-select>
-			</calcite-label>
-			
-			<calcite-label>
-			  <div style="display: flex; align-items: center; justify-content: space-between;">
-			  	  Water
-				  <calcite-icon id="water-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-				  <calcite-tooltip reference-element="water-tooltip-icon" placement="top">
-				    A - Dry to little water, B - Still water swimming expected, C - Water with a strong current
-				  </calcite-tooltip>	
-			  </div>
-			  <calcite-select id="waterRating">
-			    <calcite-option value="">Any</calcite-option>
-			    <calcite-option value="A">A</calcite-option>
-			    <calcite-option value="B">B</calcite-option>
-			    <calcite-option value="C">C</calcite-option>
-			  </calcite-select>
-			</calcite-label>
-			
-			<calcite-label style="display: flex; align-items: center;">
-			  <div style="display: flex; align-items: center; justify-content: space-between;">
-			  	Duration
-				  <calcite-icon id="duration-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-				  <calcite-tooltip reference-element="duration-tooltip-icon" placement="top">
-				    I - Few hours at most, II - Half day, III - All day most likely, IV - All day into the evening, V - 1 ½ to 2 days, VI - 2 full days or more
-				  </calcite-tooltip>			  
-			  </div>
-			  <calcite-select id="duration">
-			    <calcite-option value="">Any</calcite-option>
-			    <calcite-option value="I">I</calcite-option>
-			    <calcite-option value="II">II</calcite-option>
-			    <calcite-option value="III">III</calcite-option>
-			    <calcite-option value="IV">IV</calcite-option>
-			    <calcite-option value="V">V</calcite-option>
-			    <calcite-option value="VI">VI</calcite-option>
-			  </calcite-select>
-			</calcite-label>
-			
-			<calcite-label style="display: flex; align-items: center;">
-			  <div style="display: flex; align-items: center; justify-content: space-between;">
-				  Risk
-				  <calcite-icon id="risk-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-				  <calcite-tooltip reference-element="risk-tooltip-icon" placement="top">
-				    PG - Normal risk factors present (often ommitted), R - Risky, X & XX - Extremely risky
-				  </calcite-tooltip>
-			  </div>
-			  <calcite-select id="risk">
-			    <calcite-option value="">Any</calcite-option>
-			    <calcite-option value="PG">PG</calcite-option>
-			    <calcite-option value="R">R</calcite-option>
-			    <calcite-option value="X">X</calcite-option>
-			  </calcite-select>
-			</calcite-label>
-			
+		<!-- Techical Rating Filters -->
+		<calcite-label style="font-weight: bold">
+			Technical Rating
+		</calcite-label>
+
+		<!-- Skill Rating Filter -->
+		<calcite-label>
 			<div style="display: flex; align-items: center; justify-content: space-between;">
-			  <span style="font-weight: bold;">Quality Rating</span>
-			  <calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
-			  <calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
-			    Average quality rating from 0 to 5 based on reviews by Ropewiki users. Use his value to set a minimum rating. Ex: set to 3 to see all of the canyons rated 3 or higher
-			  </calcite-tooltip>
+				Skill
+				<calcite-icon id="skill-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				<calcite-tooltip reference-element="skill-tooltip-icon" placement="top">
+			    		3 - Technical Rappelling, 4 - Advanced Technical Rappelling
+				</calcite-tooltip>					  
+		  	</div>
+			<calcite-select id="techRating">
+				<calcite-option value="">Any</calcite-option>
+				<calcite-option value="3">3</calcite-option>
+				<calcite-option value="4">4</calcite-option>
+			</calcite-select>
+		</calcite-label>
+
+		<!-- Water Rating Filter -->
+		<calcite-label>
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				Water
+				<calcite-icon id="water-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				<calcite-tooltip reference-element="water-tooltip-icon" placement="top">
+					A - Dry to little water, B - Still water swimming expected, C - Water with a strong current
+				</calcite-tooltip>	
+			</div>
+			<calcite-select id="waterRating">
+				<calcite-option value="">Any</calcite-option>
+				<calcite-option value="A">A</calcite-option>
+				<calcite-option value="B">B</calcite-option>
+				<calcite-option value="C">C</calcite-option>
+			</calcite-select>
+		</calcite-label>
+
+		<!-- Duration Rating Filter -->
+		<calcite-label style="display: flex; align-items: center;">
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				Duration
+				<calcite-icon id="duration-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				<calcite-tooltip reference-element="duration-tooltip-icon" placement="top">
+					I - Few hours at most, II - Half day, III - All day most likely, IV - All day into the evening, V - 1 ½ to 2 days, VI - 2 full days or more
+				</calcite-tooltip>			  
+			</div>
+			<calcite-select id="duration">
+				<calcite-option value="">Any</calcite-option>
+				<calcite-option value="I">I</calcite-option>
+				<calcite-option value="II">II</calcite-option>
+				<calcite-option value="III">III</calcite-option>
+				<calcite-option value="IV">IV</calcite-option>
+				<calcite-option value="V">V</calcite-option>
+				<calcite-option value="VI">VI</calcite-option>
+			</calcite-select>
+		</calcite-label>
+
+		<!-- Risk Rating Filter -->
+		<calcite-label style="display: flex; align-items: center;">
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				Risk
+				<calcite-icon id="risk-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				<calcite-tooltip reference-element="risk-tooltip-icon" placement="top">
+					PG - Normal risk factors present (often ommitted), R - Risky, X & XX - Extremely risky
+				</calcite-tooltip>
+			</div>
+			<calcite-select id="risk">
+				<calcite-option value="">Any</calcite-option>
+				<calcite-option value="PG">PG</calcite-option>
+				<calcite-option value="R">R</calcite-option>
+				<calcite-option value="X">X</calcite-option>
+			</calcite-select>
+		</calcite-label>
+
+		<!-- Quality Rating Filter -->
+			<div style="display: flex; align-items: center; justify-content: space-between;">
+				<span style="font-weight: bold;">Quality Rating</span>
+				<calcite-icon id="quality-tooltip-icon" icon="information" scale="s" style="cursor: pointer;" tabindex="0"></calcite-icon>
+				<calcite-tooltip reference-element="quality-tooltip-icon" placement="top">
+					Average quality rating from 0 to 5 based on reviews by Ropewiki users. Use his value to set a minimum rating. Ex: set to 3 to see all of the canyons rated 3 or higher
+				</calcite-tooltip>
 			</div>
 			
 			<calcite-label>
-			  <calcite-slider
-			    id="qualityRating"
-			    min="0"
-			    max="5"
-			    step="0.5"
-			    value="0"
-			    label-inputs
-			    ticks
-			    label-handles
-			    label-ticks
-			  ></calcite-slider>
+			<calcite-slider
+				id="qualityRating"
+				min="0"
+				max="5"
+				step="0.5"
+				value="0"
+				label-inputs
+				ticks
+				label-handles
+				label-ticks
+			></calcite-slider>
 			</calcite-label>
 		
-		      <button id="clearFilterBtn" style="background-color: gray; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Clear</button>
+		<button id="clearFilterBtn" style="background-color: gray; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Clear</button>
 		      
-		      <br><br><br>
+		<br><br><br>
 		<button class="closeTabBtn" style="background-color: red; color: white; border: none; padding: 5px 10px; cursor: pointer; font-family: var(--calcite-sans-family);">Close</button>
 	</div>
-    </div>
-    
-    <script>    
+  
+<script>    
 	    
-    //function to open the tab content
-    function openTab(evt, tabName) {
-	var i, tabcontent, tablinks;
+	//function to handle the display of the different tabs. evt is event, tabname is the specific tab I want to display
+	function openTab(evt, tabName) {
+		var i, tabcontent, tablinks;
 	    
-	// hide tab content
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
+		// this line retrieves all the HTML tabcontent elements and stores them in the tabcontent variable
+		tabcontent = document.getElementsByClassName("tabcontent");
+		//this loops through the 3 tabs and sets the display to none
+		for (i = 0; i < tabcontent.length; i++) {
+			tabcontent[i].style.display = "none";
+		}
+	
+		//this line retrieves the HTML tab opening buttons and stores them as tablinks
+		tablinks = document.getElementsByClassName("tablinks");
+		// This makes all of the tab button elements unactive so that only the one that is selected is active
+		for (i = 0; i < tablinks.length; i++) {
+			tablinks[i].classList.remove("active");
+		}
+	
+		//show the clicked tab content and add active class to clicked tab
+		document.getElementById(tabName).style.display = "block";
+		evt.currentTarget.classList.add("active");
 	}
-
-	//remove active class from all tabs
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].classList.remove("active");
-	}
-
-	//show the clicked tab content and add active class to clicked tab
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.classList.add("active");
-    }
 	    
     // ArcGIS map layers set up
     require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
@@ -614,8 +620,8 @@
 		    });
 	    });
 	    
-    </script>
+</script>
 
-  </body>
+</body>
 
 </html>
