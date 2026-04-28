@@ -20,12 +20,6 @@
 
 	</style>
 
-	<script>
-		var esriConfig = {
-			apiKey: "AAPTxy8BH1VEsoebNVZXo8HurCUGQrXu3erpYf0aHrvNXlY2k_bHzGoRbEOMeM4CovQLQ4_5TDEXRExKbeJ3G1gzUztP-y2kZBZaQAZUTxjwO3XIGYBNBBQ9fCXGLyy2xrH6UWabeLBjzxxsTVZkajEazOjaXx1a4u-FDW1L_zcutIqIe397yc7pDNGcyPJoFXHCwbaZkZ1amHxvnMRDfu2hMnE36f1fM8rdhpbEEzSW_CE.AT1_2TyVjxUD"
-		};
-	</script>
-
 	<!-- Load Calcite components from CDN -->
 	<script type="module" src="https://js.arcgis.com/calcite-components/3.0.3/calcite.esm.js"></script>
 	
@@ -287,7 +281,15 @@
 	});
 	    
 	// ArcGIS map layers set up
-	require(["esri/layers/FeatureLayer", "esri/widgets/Legend", "esri/core/reactiveUtils", "esri/rest/support/Query"], (FeatureLayer, Legend, reactiveUtils, Query) => {
+	require([
+  		"esri/config",
+  		"esri/layers/FeatureLayer",
+  		"esri/widgets/Legend",
+  		"esri/core/reactiveUtils",
+  		"esri/rest/support/Query"
+	], (esriConfig, FeatureLayer, Legend, reactiveUtils, Query) => {
+
+  esriConfig.apiKey = "YOUR_API_KEY";
 		// Feature layer - module to add features to the map. Legend - legend widget. reactiveUtils - utility to reacting to events like popup clicks. Query - used to query features
 		const arcgisMap = document.querySelector("arcgis-map");			//get a reference to the <arcgis-map> custom element on the page
 		// Listen for the map view to be fully ready before doing things with it
